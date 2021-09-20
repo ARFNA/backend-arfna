@@ -36,15 +36,15 @@ public class Post implements Serializable {
 
     @Column(name="is_submitted")
     @Expose
-    private boolean isSubmitted;
+    private Boolean isSubmitted;
 
     @Column(name="is_accepted")
     @Expose
-    private boolean isAccepted;
+    private Boolean isAccepted;
 
     @Column(name="is_published")
     @Expose
-    private boolean isPublished;
+    private Boolean isPublished;
 
     @Column(name="created_at")
     @Expose
@@ -138,11 +138,17 @@ public class Post implements Serializable {
     }
 
     public void copy(Post other) {
-        other.setTitle(this.getTitle());
-        other.setMarkdown(this.getMarkdown());
-        other.setThumbnail(this.getThumbnail());
-        other.setSubmitted(this.isSubmitted());
-        other.setAccepted(this.isAccepted());
-        other.setPublished(this.isPublished());
+        if (this.getTitle() != null && !this.getTitle().equals(other.getTitle()))
+            other.setTitle(this.getTitle());
+        if (this.getMarkdown() != null && !this.getMarkdown().equals(other.getMarkdown()))
+            other.setMarkdown(this.getMarkdown());
+        if (this.getThumbnail() != null && !this.getThumbnail().equals(other.getThumbnail()))
+            other.setThumbnail(this.getThumbnail());
+        if (this.isSubmitted != null && this.isSubmitted != other.isSubmitted)
+            other.setSubmitted(this.isSubmitted());
+        if (this.isAccepted != null && this.isAccepted != other.isAccepted)
+            other.setAccepted(this.isAccepted());
+        if (this.isPublished != null && this.isPublished != other.isPublished)
+            other.setPublished(this.isPublished());
     }
 }

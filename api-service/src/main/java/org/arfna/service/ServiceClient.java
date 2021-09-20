@@ -3,6 +3,7 @@ package org.arfna.service;
 import org.arfna.api.ApiResponse;
 import org.arfna.api.ArfnaUtility;
 import org.arfna.api.Status;
+import org.arfna.method.common.MethodResponse;
 import org.arfna.util.logger.ArfnaLogger;
 
 import java.io.ByteArrayOutputStream;
@@ -12,17 +13,25 @@ import java.nio.charset.StandardCharsets;
 
 public class ServiceClient {
 
-    private String getDummyResponse(String json) {
+    private MethodResponse getDummyResponse(String json) {
         ArfnaUtility util = new ArfnaUtility();
         return util.getDummyResponse(json);
+    }
+
+    private MethodResponse getMutateSubscriberResponse(String json) {
+        ArfnaUtility util = new ArfnaUtility();
+        return util.getMutateSubscriberResponse(json);
     }
 
     public ApiResponse execute(InputStream jsonStream, String endpoint) {
         ApiResponse apiResponse;
         try {
             String payload = generateJsonPayloadFromHttpStream(jsonStream);
-            if (endpoint.contains("dummy")) {
-                String methodResponse = getDummyResponse(payload);
+            if (endpoint.contains(ESupportedEndpoints.DUMMY.getEndpointName())) {
+                MethodResponse methodResponse = getDummyResponse(payload);
+                apiResponse = generateSuccessResponse(methodResponse);
+            } else if (endpoint.contains(ESupportedEndpoints.MUTATE_SUBSCRIBER.getEndpointName())) {
+                MethodResponse methodResponse = getMutateSubscriberResponse(payload);
                 apiResponse = generateSuccessResponse(methodResponse);
             } else {
                 ArfnaLogger.error(this.getClass(), endpoint + " is not a supported endpoint");
@@ -40,7 +49,7 @@ public class ServiceClient {
         return new ApiResponse.ApiResponseBuilder().withStatus(status).build();
     }
 
-    private ApiResponse generateSuccessResponse(String response) throws IOException {
+    private ApiResponse generateSuccessResponse(MethodResponse response) throws IOException {
         return new ApiResponse.ApiResponseBuilder()
                 .withStatus(new Status(200, "OK"))
                 .withResponse(response)

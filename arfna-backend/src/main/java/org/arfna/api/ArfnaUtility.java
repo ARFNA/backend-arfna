@@ -1,9 +1,12 @@
 package org.arfna.api;
 
 import org.arfna.api.endpoints.DummyUtility;
+import org.arfna.api.endpoints.MutateSubscriberUtility;
 import org.arfna.api.version.ArfnaVersion;
 import org.arfna.api.version.EVersion;
+import org.arfna.method.common.MethodResponse;
 import org.arfna.method.dummy.DummyResponse;
+import org.arfna.method.password.login.api.MutateSubscribersResponse;
 import org.arfna.util.gson.GsonHelper;
 import org.arfna.util.logger.ArfnaLogger;
 
@@ -13,12 +16,18 @@ import org.arfna.util.logger.ArfnaLogger;
  */
 public class ArfnaUtility {
 
-    public String getDummyResponse(String jsonPayload) {
+    public MethodResponse getDummyResponse(String jsonPayload) {
         ArfnaLogger.info(this.getClass(), "Received Dummy Response call");
         EVersion version = getVersion(jsonPayload);
         DummyUtility util = new DummyUtility();
-        DummyResponse response = util.getResponse(jsonPayload, version);
-        return GsonHelper.getGson().toJson(response);
+        return util.getResponse(jsonPayload, version);
+    }
+
+    public MethodResponse getMutateSubscriberResponse(String jsonPayload) {
+        ArfnaLogger.info(this.getClass(), "Received mutate subscriber call");
+        EVersion version = getVersion(jsonPayload);
+        MutateSubscriberUtility util = new MutateSubscriberUtility();
+        return util.getResponse(jsonPayload, version);
     }
 
     private EVersion getVersion(String jsonPayload) {
