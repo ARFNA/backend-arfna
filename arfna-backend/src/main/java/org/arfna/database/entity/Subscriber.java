@@ -1,10 +1,15 @@
 package org.arfna.database.entity;
 
 import com.google.gson.annotations.Expose;
+import org.hibernate.collection.internal.PersistentList;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "subscribers")
@@ -33,9 +38,9 @@ public class Subscriber implements Serializable {
     @Expose
     private String role = "none";
 
-    @OneToMany(mappedBy="id")
+    @OneToMany(mappedBy="id", fetch= FetchType.EAGER)
     @Expose
-    private Set<Post> posts;
+    private List<Post> posts;
 
 
     public int getId() {
@@ -83,18 +88,26 @@ public class Subscriber implements Serializable {
         return this;
     }
 
-    public Set<Post> getPosts() {
-        return posts;
+    public List<Post> getPosts() {
+        if (posts == null)
+            return new ArrayList<>();
+        return this.posts;
     }
 
     public void addPost(Post p) {
+        if (posts == null)
+            posts = new ArrayList<>();
         this.posts.add(p);
     }
 
-    public void copy(Subscriber other) {
-        other.setName(this.getName());
-        other.setEmailAddress(this.getEmailAddress());
-        other.setPassword(this.getPassword());
-        other.setRole(this.getRole());
+    public void copyNewInformation(Subscriber other) {
+        if (this.getName() != null && !this.getName().equals(other.getName()))
+            other.setName(this.getName());
+        if (this.getEmailAddress() != null && !this.getEmailAddress().equals(other.getEmailAddress()))
+            other.setEmailAddress(this.getEmailAddress());
+        if (this.getPassword() != null && !this.getPassword().equals(other.getPassword()))
+            other.setPassword(this.getPassword());
+        if (this.getRole() != null && !this.getRole().equals("none") && !this.getRole().equals(other.getRole()))
+            other.setRole(this.getRole());
     }
 }

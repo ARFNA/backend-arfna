@@ -1,6 +1,7 @@
 package org.arfna.api;
 
 import com.google.gson.annotations.Expose;
+import org.arfna.method.common.MethodResponse;
 
 import java.io.Serializable;
 
@@ -8,9 +9,9 @@ public class ApiResponse implements Serializable {
     private static final long serialVersionUID = -8870025619063410219L;
 
     @Expose private Status status;
-    @Expose private Object response;
+    @Expose private MethodResponse response;
 
-    private ApiResponse(Status status, Object response) {
+    private ApiResponse(Status status, MethodResponse response) {
         this.status = status;
         this.response = response;
     }
@@ -18,14 +19,14 @@ public class ApiResponse implements Serializable {
     public static class ApiResponseBuilder {
 
         private Status status;
-        private Object response;
+        private MethodResponse response;
 
         public ApiResponseBuilder withStatus(Status status) {
             this.status = status;
             return this;
         }
 
-        public ApiResponseBuilder withResponse(Object response) {
+        public ApiResponseBuilder withResponse(MethodResponse response) {
             this.response = response;
             return this;
         }

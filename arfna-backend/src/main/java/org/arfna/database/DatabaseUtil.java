@@ -9,9 +9,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class DatabaseUtil {
 
@@ -66,29 +64,40 @@ public class DatabaseUtil {
     public void updateSubscriber(Subscriber s) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            Subscriber existingSub = session.get(Subscriber.class, s.getId());
-            s.copy(existingSub);
+            Subscriber existingSub;
+            if (s.getId() == 0) {
+                List<Subscriber> subscribers = getSubscribersFromEmail(s.getEmailAddress(), session);
+                if (subscribers.size() == 0) {
+                    ArfnaLogger.warn(this.getClass(), "Subscriber does not exist");
+                    session.getTransaction().commit();
+                    return;
+                }
+                existingSub = subscribers.get(0);
+            } else {
+                existingSub = session.get(Subscriber.class, s.getId());
+            }
+            s.copyNewInformation(existingSub);
             session.getTransaction().commit();
         } catch (Exception e) {
             ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when creating post", e);
         }
     }
 
-    public boolean doesSubscriberExist(String emailAddress) {
+    public Subscriber getSubscriberFromEmail(String emailAddress) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Subscriber> query = criteriaBuilder.createQuery(Subscriber.class);
-            Root<Subscriber> root = query.from(Subscriber.class);
-            query.select(root)
-                    .where(criteriaBuilder.equal(root.get("emailAddress"), emailAddress));
-            List<Subscriber> s = session.createQuery(query).getResultList();
+            List<Subscriber> s = getSubscribersFromEmail(emailAddress, session);
             session.getTransaction().commit();
-            return !s.isEmpty();
+            return !s.isEmpty() ? s.get(0) : null;
         } catch (Exception e) {
             ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when checking if subscriber exists", e);
         }
-        return false;
+        return null;
+    }
+
+    public boolean doesSubscriberExist(String emailAddress) {
+        Subscriber s = getSubscriberFromEmail(emailAddress);
+        return s != null;
     }
 
     public List<Post> getSubmittedPostsNotPublished() {
@@ -152,9 +161,18 @@ public class DatabaseUtil {
         return null;
     }
 
-    public Set<Post> getPostsPerSubscriber(int subscriberId) {
+    public List<Post> getPostsPerSubscriber(int subscriberId) {
         Subscriber s = getSubscriber(subscriberId);
-        return s != null ? s.getPosts() : new HashSet<>();
+        return s != null ? s.getPosts() : new ArrayList<>();
+    }
+
+    private List<Subscriber> getSubscribersFromEmail(String emailAddress, Session session) {
+        CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+        CriteriaQuery<Subscriber> query = criteriaBuilder.createQuery(Subscriber.class);
+        Root<Subscriber> root = query.from(Subscriber.class);
+        query.select(root)
+                .where(criteriaBuilder.equal(root.get("emailAddress"), emailAddress));
+        return session.createQuery(query).getResultList();
     }
 
 }
