@@ -5,3 +5,4 @@
 /api-service/src/main/resources/META-INF
 *.idea
 *.log
+*hibernate.cfg.xml
