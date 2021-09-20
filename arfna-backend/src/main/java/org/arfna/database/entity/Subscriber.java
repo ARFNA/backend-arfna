@@ -1,5 +1,7 @@
 package org.arfna.database.entity;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -12,21 +14,27 @@ public class Subscriber implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Expose
     private int id;
 
     @Column(name = "name")
+    @Expose
     private String name;
 
     @Column(name = "email_address")
+    @Expose
     private String emailAddress;
 
     @Column(name = "password")
+    @Expose
     private String password;
 
     @Column(name = "role")
+    @Expose
     private String role = "none";
 
     @OneToMany(mappedBy="id")
+    @Expose
     private Set<Post> posts;
 
 
