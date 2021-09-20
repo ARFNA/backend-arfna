@@ -1,0 +1,7 @@
+/arfna-backend/target/
+/server/target/
+/api-service/target/
+/arfna-main/target/
+/api-service/src/main/resources/META-INF
+*.idea
+*.log
