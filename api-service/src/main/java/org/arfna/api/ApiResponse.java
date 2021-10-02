@@ -16,6 +16,14 @@ public class ApiResponse implements Serializable {
         this.response = response;
     }
 
+    public Status getStatus() {
+        return status;
+    }
+
+    public MethodResponse getResponse() {
+        return response;
+    }
+
     public static class ApiResponseBuilder {
 
         private Status status;
