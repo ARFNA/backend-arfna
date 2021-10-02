@@ -26,4 +26,12 @@ public class MutateSubscribersResponse extends MethodResponse implements Seriali
         this.subscriber = subscriber;
         return this;
     }
+
+    public Subscriber getSubscriber() {
+        return subscriber;
+    }
+
+    public boolean passedValidation() {
+        return this.messages == null || this.messages.isEmpty();
+    }
 }

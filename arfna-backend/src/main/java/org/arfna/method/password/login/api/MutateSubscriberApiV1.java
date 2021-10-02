@@ -18,7 +18,10 @@ public class MutateSubscriberApiV1 implements IMutateSubscriberApi {
             return util.addPassword(payload.getSubscriber(), version);
         } if (payload.getMutation() == ESubscriberMutation.LOGIN) {
             ArfnaLogger.debug(this.getClass(), "Logging in user");
-            return util.login(payload.getSubscriber(), version);
+            MutateSubscribersResponse response = util.login(payload.getSubscriber(), version);
+            if (response.passedValidation())
+                response.addDataToSend(response.getSubscriber());
+            return response;
         } if (payload.getMutation() == ESubscriberMutation.ADD_SUBSCRIBER_WITH_PASSWORD) {
             ArfnaLogger.debug(this.getClass(), "Registering subscriber with password");
             return util.addSubscriberWithPassword(payload.getSubscriber(), version);
