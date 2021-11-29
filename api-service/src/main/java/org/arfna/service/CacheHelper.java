@@ -5,6 +5,7 @@ import org.arfna.database.entity.Subscriber;
 import org.arfna.util.datastructure.TimedHashMap;
 
 import java.util.Map;
+import java.util.Optional;
 
 public class CacheHelper {
 
@@ -20,11 +21,11 @@ public class CacheHelper {
         return generatedKey;
     }
 
-    public static Subscriber getAsSubscriber(String name) {
+    public static Optional<Subscriber> getAsSubscriber(String name) {
         Object value = COOKIE_CACHE.get(name);
         if (value instanceof Subscriber) {
-            return (Subscriber) value;
+            return Optional.of((Subscriber) value);
         }
-        return null;
+        return Optional.empty();
     }
 }
