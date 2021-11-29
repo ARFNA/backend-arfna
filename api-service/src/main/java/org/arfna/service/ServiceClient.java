@@ -3,6 +3,7 @@ package org.arfna.service;
 import org.arfna.api.ApiResponse;
 import org.arfna.api.ArfnaUtility;
 import org.arfna.api.Status;
+import org.arfna.database.entity.Subscriber;
 import org.arfna.method.common.MethodResponse;
 import org.arfna.util.logger.ArfnaLogger;
 
@@ -10,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Optional;
 
 public class ServiceClient {
 
@@ -23,7 +25,7 @@ public class ServiceClient {
         return util.getMutateSubscriberResponse(json);
     }
 
-    public ApiResponse execute(InputStream jsonStream, String endpoint) {
+    public ApiResponse execute(InputStream jsonStream, String endpoint, Optional<Subscriber> loggedInSubscriber) {
         ApiResponse apiResponse;
         try {
             String payload = generateJsonPayloadFromHttpStream(jsonStream);
@@ -49,7 +51,7 @@ public class ServiceClient {
         return new ApiResponse.ApiResponseBuilder().withStatus(status).build();
     }
 
-    private ApiResponse generateSuccessResponse(MethodResponse response) throws IOException {
+    private ApiResponse generateSuccessResponse(MethodResponse response) {
         return new ApiResponse.ApiResponseBuilder()
                 .withStatus(new Status(200, "OK"))
                 .withResponse(response)

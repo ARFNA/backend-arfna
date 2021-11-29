@@ -1,7 +1,5 @@
 package org.arfna.method.common;
 
-import com.google.gson.annotations.Expose;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +13,6 @@ public class MethodResponse implements Serializable {
 
     private transient boolean sendCookie;
     private transient List<Object> dataToPersist = new ArrayList<>();
-
-    public boolean isSendCookie() {
-        return sendCookie;
-    }
 
     public MethodResponse addDataToSend(Object toSend) {
         this.setSendCookie();
