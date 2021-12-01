@@ -54,6 +54,80 @@
 }
 ```
 
+## Mutating the Blog Post Table (`/mpost`)
+This API cannot be used unless a valid cookie has been transferred using the LOGIN API from the mutate subscriber API.
+
+**Getting all posts that subscriber has authored**
+```json
+{
+    "version": "V1",
+    "mutation": "GET_FOR_SUBSCRIBER"
+}
+```
+**Getting existing post given an ID**
+```json
+{
+    "version": "V1",
+    "mutation": "GET_EXISTING_POST", 
+    "post": {
+        "id": 1
+    }
+}
+```
+**Saving a new post**
+```json
+{
+    "version": "V1",
+    "mutation": "SAVE",
+    "post": {
+        "title": "My brand new post",
+        "markdown": "It's not quite done, but I wanna"
+    }
+}
+```
+_If this was an existing post, include the ID of the post using the "id" key_
+
+**Submitting a post**
+```json
+{
+    "version": "V1",
+    "mutation": "SUBMIT",
+    "post": {
+        "id": 5,
+        "title": "My brand new post",
+        "markdown": "It's not quite done, but I wanna finish it soon. Now I finally think it's ready"
+    }
+}
+```
+_If the post did not exist before, just don't submit the id key_
+
+**Accepting a submitted post**
+
+_In order to accept a post, you must have the "maint" role_
+```json
+{
+    "version": "V1",
+    "mutation": "ACCEPT",
+    "post": {
+        "id": 6
+    }
+}
+```
+
+**Publishing an accepted post**
+
+_In order to publish a post, you must have the "admin" role_
+
+```json
+{
+    "version": "V1",
+    "mutation": "PUBLISH",
+    "post": {
+        "id": 6
+    }
+}
+```
+
 ## Validation and Error Codes
 Every response is sent back with the following format
 ```json
