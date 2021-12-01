@@ -1,5 +1,7 @@
 package org.arfna.method.common;
 
+import com.google.gson.annotations.Expose;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,8 +13,11 @@ import java.util.List;
 public class MethodResponse implements Serializable {
     private static final long serialVersionUID = -6864423760419443911L;
 
+    @Expose private List<ValidationMessage> messages;
+
     private transient boolean sendCookie;
     private transient List<Object> dataToPersist = new ArrayList<>();
+    private transient boolean isUnauthorized;
 
     public MethodResponse addDataToSend(Object toSend) {
         this.setSendCookie();
@@ -24,6 +29,14 @@ public class MethodResponse implements Serializable {
         return dataToPersist;
     }
 
+    public void setUnauthorized() {
+        this.isUnauthorized = true;
+    }
+
+    public boolean isUnauthorized() {
+        return this.isUnauthorized;
+    }
+
     private MethodResponse setSendCookie() {
         this.sendCookie = true;
         return this;
@@ -33,4 +46,16 @@ public class MethodResponse implements Serializable {
         this.sendCookie = false;
         return this;
     }
+
+    public void addValidationMessage(ValidationMessage message) {
+        if (this.messages == null) {
+            this.messages = new ArrayList<>();
+        }
+        this.messages.add(message);
+    }
+
+    public boolean passedValidation() {
+        return this.messages == null || this.messages.isEmpty();
+    }
+
 }

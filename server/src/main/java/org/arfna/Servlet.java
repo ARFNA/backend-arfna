@@ -72,14 +72,15 @@ public class Servlet extends HttpServlet {
     }
 
     private void addCookies(ApiResponse apiResponse, HttpServletResponse response) {
-        List<String> subscriberKeys = apiResponse.getResponse().getDataToPersist().stream().map(CacheHelper::addValue).collect(Collectors.toList());
-        subscriberKeys.forEach(k -> {
-            Cookie c = new Cookie(ECookieKeys.SUBSCRIBER.getCookieName(), k);
-            c.setMaxAge(4 * 60 * 60); // 4 hours in seconds
-            c.setHttpOnly(true);
-            response.addCookie(c);
-        });
+        if (apiResponse.getResponse() != null && apiResponse.getResponse().getDataToPersist() != null ) {
+            List<String> subscriberKeys = apiResponse.getResponse().getDataToPersist().stream().map(CacheHelper::addValue).collect(Collectors.toList());
+            subscriberKeys.forEach(k -> {
+                Cookie c = new Cookie(ECookieKeys.SUBSCRIBER.getCookieName(), k);
+                c.setMaxAge(4 * 60 * 60); // 4 hours in seconds
+                c.setHttpOnly(true);
+                response.addCookie(c);
+            });
+        }
     }
-
 
 }

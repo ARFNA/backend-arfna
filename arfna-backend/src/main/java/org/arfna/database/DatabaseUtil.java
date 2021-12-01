@@ -8,6 +8,7 @@ import org.hibernate.Session;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,14 +33,22 @@ public class DatabaseUtil {
         return false;
     }
 
-    public void createPost(Post p) {
+    /**
+     * Creates a post and returns the unique identifier of the post
+     * @param p post to write to the table
+     * @return the unique key for the post
+     */
+    public int createPost(Post p) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
-            session.save(p);
+            Serializable key = session.save(p);
             session.getTransaction().commit();
+            if (key instanceof Integer)
+                return (Integer) key;
         } catch (Exception e) {
             ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when creating post", e);
         }
+        return -1;
     }
 
     /**
