@@ -1,25 +1,34 @@
 package org.arfna.api.version;
 
 import org.arfna.database.DatabaseUtil;
+import org.arfna.method.blog.mutation.IMutatePostApi;
+import org.arfna.method.blog.mutation.MutatePostApiV1;
 import org.arfna.method.dummy.DummyApiV1;
 import org.arfna.method.dummy.IDummyApi;
 import org.arfna.method.password.IPasswordHelper;
 import org.arfna.method.password.PasswordHelperV1;
 import org.arfna.method.password.login.api.IMutateSubscriberApi;
 import org.arfna.method.password.login.api.MutateSubscriberApiV1;
+import org.arfna.method.password.middleware.IMiddlewareHelper;
+import org.arfna.method.password.middleware.MiddlewareHelperV1;
 
 public enum EVersion {
 
-    V1(new DummyApiV1(), new MutateSubscriberApiV1(), new DatabaseUtil(), new PasswordHelperV1());
+    V1(new DummyApiV1(), new MutateSubscriberApiV1(), new MutatePostApiV1(), new MiddlewareHelperV1(), new DatabaseUtil(), new PasswordHelperV1());
 
     private IDummyApi dummyAPI;
     private IMutateSubscriberApi mutateSubscriberApi;
+    private IMutatePostApi mutatePostApi;
+    private IMiddlewareHelper middlewareHelper;
     private DatabaseUtil databaseUtil;
     private IPasswordHelper passwordHelper;
 
-    EVersion(IDummyApi dummyAPI, IMutateSubscriberApi mutateSubscriberApi, DatabaseUtil databaseUtil, IPasswordHelper passwordHelper) {
+    EVersion(IDummyApi dummyAPI, IMutateSubscriberApi mutateSubscriberApi, IMutatePostApi mutatePostApi, IMiddlewareHelper middlewareHelper,
+             DatabaseUtil databaseUtil, IPasswordHelper passwordHelper) {
         this.dummyAPI = dummyAPI;
         this.mutateSubscriberApi = mutateSubscriberApi;
+        this.mutatePostApi = mutatePostApi;
+        this.middlewareHelper = middlewareHelper;
         this.databaseUtil = databaseUtil;
         this.passwordHelper = passwordHelper;
     }
@@ -36,7 +45,15 @@ public enum EVersion {
         return passwordHelper;
     }
 
+    public IMiddlewareHelper getMiddlewareHelper() {
+        return middlewareHelper;
+    }
+
     public IMutateSubscriberApi getMutateSubscriberApi() {
         return mutateSubscriberApi;
+    }
+
+    public IMutatePostApi getMutatePostApi() {
+        return mutatePostApi;
     }
 }

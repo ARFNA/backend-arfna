@@ -58,6 +58,9 @@ public class Post implements Serializable {
     public void onCreate() {
         createdAt = new Date();
         lastUpdated = new Date();
+        this.isSubmitted = false;
+        this.isAccepted = false;
+        this.isPublished = false;
     }
 
     @PreUpdate

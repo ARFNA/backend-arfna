@@ -12,18 +12,11 @@ import java.util.List;
 public class MutateSubscribersResponse extends MethodResponse implements Serializable {
     private static final long serialVersionUID = -8394424520387746033L;
 
-    @Expose private List<ValidationMessage> messages;
     @Expose private Subscriber subscriber;
-
-    public void addValidationMessage(ValidationMessage message) {
-        if (this.messages == null) {
-            this.messages = new ArrayList<>();
-        }
-        this.messages.add(message);
-    }
 
     public MutateSubscribersResponse setSubscriber(Subscriber subscriber) {
         this.subscriber = subscriber;
+        this.prepareAsHttpResponse();
         return this;
     }
 
@@ -31,7 +24,9 @@ public class MutateSubscribersResponse extends MethodResponse implements Seriali
         return subscriber;
     }
 
-    public boolean passedValidation() {
-        return this.messages == null || this.messages.isEmpty();
+    public void prepareAsHttpResponse() {
+        this.subscriber.setPostsToNull();
+        this.subscriber.setPassword(null);
     }
+
 }

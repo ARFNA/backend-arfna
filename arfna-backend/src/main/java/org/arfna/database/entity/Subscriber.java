@@ -38,7 +38,7 @@ public class Subscriber implements Serializable {
     @Expose
     private String role = "none";
 
-    @OneToMany(mappedBy="id", fetch= FetchType.EAGER)
+    @OneToMany(mappedBy="author", fetch= FetchType.EAGER)
     @Expose
     private List<Post> posts;
 
@@ -98,6 +98,14 @@ public class Subscriber implements Serializable {
         if (posts == null)
             posts = new ArrayList<>();
         this.posts.add(p);
+    }
+
+    /**
+     * USE WITH CARE
+     * Do not use this when writing to the database, but when posting a response
+     */
+    public void setPostsToNull() {
+        this.posts = null;
     }
 
     public void copyNewInformation(Subscriber other) {

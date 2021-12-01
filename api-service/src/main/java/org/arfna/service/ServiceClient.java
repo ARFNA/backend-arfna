@@ -25,6 +25,11 @@ public class ServiceClient {
         return util.getMutateSubscriberResponse(json);
     }
 
+    private MethodResponse getMutatePostTableResponse(String json, Optional<Subscriber> loggedInSubscriber) {
+        ArfnaUtility util = new ArfnaUtility();
+        return util.getMutatePostTableResponse(json, loggedInSubscriber);
+    }
+
     public ApiResponse execute(InputStream jsonStream, String endpoint, Optional<Subscriber> loggedInSubscriber) {
         ApiResponse apiResponse;
         try {
@@ -35,7 +40,12 @@ public class ServiceClient {
             } else if (endpoint.contains(ESupportedEndpoints.MUTATE_SUBSCRIBER.getEndpointName())) {
                 MethodResponse methodResponse = getMutateSubscriberResponse(payload);
                 apiResponse = generateSuccessResponse(methodResponse);
-            } else {
+            } else if (endpoint.contains(ESupportedEndpoints.MUTATE_POST_TABLE.getEndpointName())) {
+                MethodResponse methodResponse = getMutatePostTableResponse(payload, loggedInSubscriber);
+                apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
+                        generateSuccessResponse(methodResponse);
+            }
+            else {
                 ArfnaLogger.error(this.getClass(), endpoint + " is not a supported endpoint");
                 apiResponse = generateFailureResponse(400, "Unsupported endpoint");
             }
@@ -44,6 +54,10 @@ public class ServiceClient {
             apiResponse = generateFailureResponse(400, e.getMessage());
         }
         return apiResponse;
+    }
+
+    private ApiResponse generateNotAuthorizedResponse() {
+        return generateFailureResponse(401, "User is not authorized to make API call");
     }
 
     private ApiResponse generateFailureResponse(int code, String reason) {

@@ -5,6 +5,7 @@ import org.arfna.database.entity.Subscriber;
 import org.arfna.method.common.EValidationMessage;
 import org.arfna.method.common.ValidationMessage;
 import org.arfna.method.password.login.api.MutateSubscribersResponse;
+import org.arfna.method.password.middleware.ESubscriberRole;
 import org.arfna.util.logger.ArfnaLogger;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class MutateSubscriberUtil {
         if (checkIfSubscriberExists(subscriber, version, response)) return response;
         if (validatePassword(subscriber, version, response)) return response;
         encryptPassword(subscriber, version);
+        setRoleToWriter(subscriber);
         ArfnaLogger.debug(this.getClass(), "Adding new subscriber to table");
         version.getDatabaseUtil().createSubscriber(subscriber);
         Subscriber subscriberInTable = version.getDatabaseUtil().getSubscriberFromEmail(subscriber.getEmailAddress());
@@ -35,6 +37,7 @@ public class MutateSubscriberUtil {
         MutateSubscribersResponse response = new MutateSubscribersResponse();
         if (validatePassword(subscriber, version, response)) return response;
         encryptPassword(subscriber, version);
+        setRoleToWriter(subscriber);
         ArfnaLogger.debug(this.getClass(), "Updating subscriber entry with password");
         version.getDatabaseUtil().updateSubscriber(subscriber);
         Subscriber subscriberInTable = version.getDatabaseUtil().getSubscriberFromEmail(subscriber.getEmailAddress());
@@ -67,6 +70,14 @@ public class MutateSubscriberUtil {
         ArfnaLogger.debug(this.getClass(), "Encrypting password");
         String hashedPassword = version.getPasswordHelper().getEncryptedPassword(subscriber.getPassword());
         subscriber.setPassword(hashedPassword);
+    }
+
+    /**
+     * If user has a password, then the assumption is they can contribute blog articles
+     */
+    private void setRoleToWriter(Subscriber subscriber) {
+        ArfnaLogger.debug(this.getClass(), "Updating role of subscriber");
+        subscriber.setRole(ESubscriberRole.WRITER_ROLE.getRoleName());
     }
 
     private boolean validatePassword(Subscriber subscriber, EVersion version, MutateSubscribersResponse response) {
