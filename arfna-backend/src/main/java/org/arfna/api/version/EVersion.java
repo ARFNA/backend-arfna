@@ -5,6 +5,8 @@ import org.arfna.method.blog.GetBlogApiV1;
 import org.arfna.method.blog.IGetBlogApi;
 import org.arfna.method.blog.mutation.IMutatePostApi;
 import org.arfna.method.blog.mutation.MutatePostApiV1;
+import org.arfna.method.cookie.subscriber.ISubscriberCookieApi;
+import org.arfna.method.cookie.subscriber.SubscriberCookieApiV1;
 import org.arfna.method.dummy.DummyApiV1;
 import org.arfna.method.dummy.IDummyApi;
 import org.arfna.method.password.IPasswordHelper;
@@ -16,23 +18,25 @@ import org.arfna.method.password.middleware.MiddlewareHelperV1;
 
 public enum EVersion {
 
-    V1(new DummyApiV1(), new MutateSubscriberApiV1(), new MutatePostApiV1(), new GetBlogApiV1(),
+    V1(new DummyApiV1(), new MutateSubscriberApiV1(), new MutatePostApiV1(), new GetBlogApiV1(), new SubscriberCookieApiV1(),
             new MiddlewareHelperV1(), new DatabaseUtil(), new PasswordHelperV1());
 
     private IDummyApi dummyAPI;
     private IMutateSubscriberApi mutateSubscriberApi;
     private IMutatePostApi mutatePostApi;
     private IGetBlogApi getBlogApi;
+    private ISubscriberCookieApi subscriberCookieApi;
     private IMiddlewareHelper middlewareHelper;
     private DatabaseUtil databaseUtil;
     private IPasswordHelper passwordHelper;
 
     EVersion(IDummyApi dummyAPI, IMutateSubscriberApi mutateSubscriberApi, IMutatePostApi mutatePostApi, IGetBlogApi getBlogApi,
-             IMiddlewareHelper middlewareHelper, DatabaseUtil databaseUtil, IPasswordHelper passwordHelper) {
+             ISubscriberCookieApi subscriberCookieApi, IMiddlewareHelper middlewareHelper, DatabaseUtil databaseUtil, IPasswordHelper passwordHelper) {
         this.dummyAPI = dummyAPI;
         this.mutateSubscriberApi = mutateSubscriberApi;
         this.mutatePostApi = mutatePostApi;
         this.getBlogApi = getBlogApi;
+        this.subscriberCookieApi = subscriberCookieApi;
         this.middlewareHelper = middlewareHelper;
         this.databaseUtil = databaseUtil;
         this.passwordHelper = passwordHelper;
@@ -64,5 +68,9 @@ public enum EVersion {
 
     public IGetBlogApi getGetBlogApi() {
         return getBlogApi;
+    }
+
+    public ISubscriberCookieApi getSubscriberCookieApi() {
+        return subscriberCookieApi;
     }
 }
