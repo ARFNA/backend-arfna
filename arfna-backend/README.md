@@ -128,6 +128,17 @@ _In order to publish a post, you must have the "admin" role_
 }
 ```
 
+## Getting Blog Posts (`/gpost`)
+This API has utilities for getting blog posts that do not require a cookie.
+
+**Getting all published posts**
+```json
+{
+    "version": "V1",
+    "requestType": "GET_ALL_PUBLISHED"
+}
+```
+
 ## Validation and Error Codes
 Every response is sent back with the following format
 ```json

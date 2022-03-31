@@ -32,7 +32,7 @@ public class MutatePostResponse extends MethodResponse implements Serializable {
         return post;
     }
 
-    public void prepareForSerialization() {
+    private void prepareForSerialization() {
         if (this.allPosts != null)
             this.allPosts.forEach(x -> x.setAuthor(null));
         if (this.post != null)
