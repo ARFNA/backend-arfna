@@ -1,7 +1,6 @@
 package org.arfna.method.blog.mutation;
 
 import org.arfna.api.version.EVersion;
-import org.arfna.database.DatabaseUtil;
 import org.arfna.database.entity.Post;
 import org.arfna.database.entity.Subscriber;
 import org.arfna.method.common.EValidationMessage;
