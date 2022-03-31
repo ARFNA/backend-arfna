@@ -1,6 +1,7 @@
 package org.arfna.api;
 
 import org.arfna.api.endpoints.DummyUtility;
+import org.arfna.api.endpoints.GetBlogPostUtility;
 import org.arfna.api.endpoints.MutatePostUtility;
 import org.arfna.api.endpoints.MutateSubscriberUtility;
 import org.arfna.api.version.ArfnaVersion;
@@ -37,6 +38,13 @@ public class ArfnaUtility {
         EVersion version = getVersion(jsonPayload);
         MutatePostUtility util = new MutatePostUtility();
         return util.getResponse(jsonPayload, version, subscriber);
+    }
+
+    public MethodResponse getPostsResponse(String jsonPayload) {
+        ArfnaLogger.info(this.getClass(), "Received get posts call");
+        EVersion version = getVersion(jsonPayload);
+        GetBlogPostUtility util = new GetBlogPostUtility();
+        return util.getResponse(jsonPayload, version);
     }
 
     private EVersion getVersion(String jsonPayload) {

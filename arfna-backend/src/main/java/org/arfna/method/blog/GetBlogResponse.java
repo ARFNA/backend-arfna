@@ -18,5 +18,11 @@ public class GetBlogResponse extends MethodResponse implements Serializable {
 
     public void setPosts(List<Post> posts) {
         this.posts = posts;
+        prepareForSerialization();
+    }
+
+    private void prepareForSerialization() {
+        if (this.posts != null)
+            this.posts.forEach(x -> x.getAuthor().setPostsToNull());
     }
 }

@@ -4,7 +4,9 @@ public enum ESupportedEndpoints {
 
     DUMMY("dummy"),
     MUTATE_SUBSCRIBER("msubscriber"),
-    MUTATE_POST_TABLE("mpost");
+    MUTATE_POST_TABLE("mpost"),
+    GET_POST("gpost"),
+    ;
 
     private String endpointName;
 
