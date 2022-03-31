@@ -42,14 +42,14 @@ public class MutatePostHelper {
         // ensure that during save process, nothing else is allowed
         payload.markPostNotReady();
         // if the payload post ID exists, this means this is an existing post that exists in the table.
-        return payload.getPost().getId() > 0 ? overwriteExistingPost(payload, version, subscriber) :
+        return payload.getPost().getId() > 0 ? overwriteExistingPost(payload, version) :
                 addNewPost(payload, version, subscriber);
     }
 
     public MutatePostResponse submitPost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {
         ArfnaLogger.debug(this.getClass(), "Updating given post and marking as submitted");
         payload.markInputPostAsSubmitted();
-        return payload.getPost().getId() > 0 ? overwriteExistingPost(payload, version, subscriber) :
+        return payload.getPost().getId() > 0 ? overwriteExistingPost(payload, version) :
                 addNewPost(payload, version, subscriber);
     }
 
@@ -60,7 +60,7 @@ public class MutatePostHelper {
             return response;
         }
         payload.markInputPostAsAccepted();
-        return overwriteExistingPost(payload, version, subscriber);
+        return overwriteExistingPost(payload, version);
     }
 
     public MutatePostResponse publishPost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {
@@ -70,10 +70,10 @@ public class MutatePostHelper {
             return response;
         }
         payload.markInputPostAsPublished();
-        return overwriteExistingPost(payload, version, subscriber);
+        return overwriteExistingPost(payload, version);
     }
 
-    private MutatePostResponse overwriteExistingPost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {
+    private MutatePostResponse overwriteExistingPost(MutatePostPayload payload, EVersion version) {
         MutatePostResponse response = new MutatePostResponse();
         Post postToOverwrite = payload.getPost();
         version.getDatabaseUtil().updatePost(postToOverwrite);
