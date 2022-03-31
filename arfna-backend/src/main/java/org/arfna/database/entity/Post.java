@@ -26,6 +26,10 @@ public class Post implements Serializable {
     @Expose
     private String title;
 
+    @Column(name="summary")
+    @Expose
+    private String summary;
+
     @Column(name="markdown")
     @Expose
     private String markdown;
@@ -95,6 +99,15 @@ public class Post implements Serializable {
         return this;
     }
 
+    public String getSummary() {
+        return summary;
+    }
+
+    public Post setSummary(String summary) {
+        this.summary = summary;
+        return this;
+    }
+
     public String getMarkdown() {
         return markdown;
     }
@@ -145,6 +158,8 @@ public class Post implements Serializable {
             other.setTitle(this.getTitle());
         if (this.getMarkdown() != null && !this.getMarkdown().equals(other.getMarkdown()))
             other.setMarkdown(this.getMarkdown());
+        if (this.getSummary() != null && !this.getSummary().equals(other.getSummary()))
+            other.setSummary(this.getSummary());
         if (this.getThumbnail() != null && !this.getThumbnail().equals(other.getThumbnail()))
             other.setThumbnail(this.getThumbnail());
         if (this.isSubmitted != null && this.isSubmitted != other.isSubmitted)
