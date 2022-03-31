@@ -1,9 +1,6 @@
 package org.arfna.api;
 
-import org.arfna.api.endpoints.DummyUtility;
-import org.arfna.api.endpoints.GetBlogPostUtility;
-import org.arfna.api.endpoints.MutatePostUtility;
-import org.arfna.api.endpoints.MutateSubscriberUtility;
+import org.arfna.api.endpoints.*;
 import org.arfna.api.version.ArfnaVersion;
 import org.arfna.api.version.EVersion;
 import org.arfna.database.entity.Subscriber;
@@ -45,6 +42,13 @@ public class ArfnaUtility {
         EVersion version = getVersion(jsonPayload);
         GetBlogPostUtility util = new GetBlogPostUtility();
         return util.getResponse(jsonPayload, version);
+    }
+
+    public MethodResponse getSubscriberCookieResponse(String jsonPayload, Optional<Subscriber> subscriber) {
+        ArfnaLogger.info(this.getClass(), "Received read subscriber cookie call");
+        EVersion version = getVersion(jsonPayload);
+        ReadSubscriberCookieUtility util = new ReadSubscriberCookieUtility();
+        return util.getResponse(jsonPayload, version, subscriber);
     }
 
     private EVersion getVersion(String jsonPayload) {

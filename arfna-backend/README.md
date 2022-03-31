@@ -47,7 +47,7 @@
     "version": "V1",
     "mutation": "ADD_SUBSCRIBER_WITH_PASSWORD",
     "subscriber": {
-    "name": "Not Roshnee Sharma",
+        "name": "Not Roshnee Sharma",
         "emailAddress": "notmyrealemail@gmail.com",
         "password": "NotMyPassword123$"		
     }
@@ -149,6 +149,20 @@ This API has utilities for getting blog posts that do not require a cookie.
     "requestType": "GET_ALL_PUBLISHED"
 }
 ```
+
+## Reading the subscriber cookie (`/rsubscriber`)
+This API is used to read the server side only cookie. It is helpful for when a user is logged in, to get their name, email, and role for any client side validation purposes
+
+It will throw an unauthorized error if the cookie is not valid anymore.
+
+**Getting all identifying fields for subscriber**
+```json
+{
+    "version": "V1", 
+    "field": "ALL"
+}
+```
+
 
 ## Validation and Error Codes
 Every response is sent back with the following format

@@ -35,6 +35,11 @@ public class ServiceClient {
         return util.getPostsResponse(json);
     }
 
+    private MethodResponse getSubscriberCookieResponse(String json, Optional<Subscriber> loggedInSubscriber) {
+        ArfnaUtility util = new ArfnaUtility();
+        return util.getSubscriberCookieResponse(json, loggedInSubscriber);
+    }
+
     public ApiResponse execute(InputStream jsonStream, String endpoint, Optional<Subscriber> loggedInSubscriber) {
         ApiResponse apiResponse;
         try {
@@ -52,6 +57,10 @@ public class ServiceClient {
             } else if (endpoint.contains(ESupportedEndpoints.GET_POST.getEndpointName())) {
                 MethodResponse methodResponse = getPostsResponse(payload);
                 apiResponse = generateSuccessResponse(methodResponse);
+            } else if (endpoint.contains(ESupportedEndpoints.READ_SUBSCRIBER_COOKIE.getEndpointName())) {
+                MethodResponse methodResponse = getSubscriberCookieResponse(payload, loggedInSubscriber);
+                apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
+                        generateSuccessResponse(methodResponse);
             } else {
                 ArfnaLogger.error(this.getClass(), endpoint + " is not a supported endpoint");
                 apiResponse = generateFailureResponse(400, "Unsupported endpoint");
