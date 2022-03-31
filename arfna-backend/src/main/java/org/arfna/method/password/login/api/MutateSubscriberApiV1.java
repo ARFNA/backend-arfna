@@ -25,6 +25,9 @@ public class MutateSubscriberApiV1 implements IMutateSubscriberApi {
         } if (payload.getMutation() == ESubscriberMutation.ADD_SUBSCRIBER_WITH_PASSWORD) {
             ArfnaLogger.debug(this.getClass(), "Registering subscriber with password");
             return util.addSubscriberWithPassword(payload.getSubscriber(), version);
+        } if (payload.getMutation() == ESubscriberMutation.CHECK_TYPE_FROM_EMAIL) {
+            ArfnaLogger.debug(this.getClass(), "Checking type of email stored in database");
+            return util.checkTypeSubscriberFromEmail(payload.getSubscriber(), version);
         }
         MutateSubscribersResponse response = new MutateSubscribersResponse();
         response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_API));
