@@ -54,6 +54,17 @@
 }
 ```
 
+**Check what info subscriber has in table**
+```json
+{
+    "version": "V1",
+    "mutation": "CHECK_TYPE_FROM_EMAIL",
+    "subscriber": {
+        "emailAddress": "test@gmail.com"
+    }
+}
+```
+
 ## Mutating the Blog Post Table (`/mpost`)
 This API cannot be used unless a valid cookie has been transferred using the LOGIN API from the mutate subscriber API.
 

@@ -6,6 +6,7 @@ import org.arfna.method.common.EValidationMessage;
 import org.arfna.method.common.ValidationMessage;
 import org.arfna.method.password.login.api.MutateSubscribersResponse;
 import org.arfna.method.password.middleware.ESubscriberRole;
+import org.arfna.util.gson.GsonHelper;
 import org.arfna.util.logger.ArfnaLogger;
 
 import java.util.List;
@@ -56,6 +57,18 @@ public class MutateSubscriberUtil {
             return response;
         }
         return new MutateSubscribersResponse().setSubscriber(subscriberInTable);
+    }
+
+    public MutateSubscribersResponse checkTypeSubscriberFromEmail(Subscriber subscriber, EVersion version) {
+        MutateSubscribersResponse response = new MutateSubscribersResponse();
+        Subscriber subscriberInTable = version.getDatabaseUtil().getSubscriberFromEmail(subscriber.getEmailAddress());
+        if (subscriberInTable == null)
+            return response.setSubscriberType(ESubscriberType.NOT_IN_TABLE);
+        if (subscriberInTable.getName() != null && subscriberInTable.getPassword() == null)
+            return response.setSubscriberType(ESubscriberType.NAME_AND_EMAIL);
+        if (subscriberInTable.getName()!= null && subscriberInTable.getPassword() != null)
+            return response.setSubscriberType(ESubscriberType.NAME_AND_EMAIL_AND_PASSWORD);
+        return response.setSubscriberType(ESubscriberType.UNKNOWN);
     }
 
     private void addSubscriberExistsResponse(MutateSubscribersResponse response, Subscriber potentialSubscriberInTable) {
