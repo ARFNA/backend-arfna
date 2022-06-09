@@ -14,7 +14,7 @@ public class ImageIdApiV1 implements IImageIdApi {
         if (requestType == EImageRequest.GENERATE_ID) {
             ImageIdHelper helper = new ImageIdHelper();
             ArfnaLogger.debug(this.getClass(), "Checking permissions for ID generation");
-            if (helper.checkIfValidWritePermission(payload, version, subscriber)) {
+            if (!helper.checkIfValidWritePermission(payload, version, subscriber)) {
                 ImageIdResponse response = new ImageIdResponse();
                 response.setUnauthorized();
                 return response;
