@@ -1,8 +1,8 @@
 package org.arfna.api;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.arfna.method.common.MethodResponse;
 import org.arfna.util.gson.GsonHelper;
+import org.junit.Ignore;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

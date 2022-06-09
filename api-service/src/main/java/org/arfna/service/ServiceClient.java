@@ -40,6 +40,11 @@ public class ServiceClient {
         return util.getSubscriberCookieResponse(json, loggedInSubscriber);
     }
 
+    private MethodResponse imageIdResponse(String json, Optional<Subscriber> loggedInSubscriber) {
+        ArfnaUtility util = new ArfnaUtility();
+        return util.imageIdResponse(json, loggedInSubscriber);
+    }
+
     public ApiResponse execute(InputStream jsonStream, String endpoint, Optional<Subscriber> loggedInSubscriber) {
         ApiResponse apiResponse;
         try {
@@ -61,7 +66,12 @@ public class ServiceClient {
                 MethodResponse methodResponse = getSubscriberCookieResponse(payload, loggedInSubscriber);
                 apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
                         generateSuccessResponse(methodResponse);
-            } else {
+            } else if (endpoint.contains(ESupportedEndpoints.IMAGE_ID.getEndpointName())) {
+                MethodResponse methodResponse = imageIdResponse(payload, loggedInSubscriber);
+                apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
+                        generateSuccessResponse(methodResponse);
+            }
+            else {
                 ArfnaLogger.error(this.getClass(), endpoint + " is not a supported endpoint");
                 apiResponse = generateFailureResponse(400, "Unsupported endpoint");
             }
