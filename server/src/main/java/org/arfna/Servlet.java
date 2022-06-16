@@ -52,6 +52,7 @@ public class Servlet extends HttpServlet {
             Optional<Subscriber> subscriberCookie = getSubscriberCookie(request);
             ApiResponse apiResponse = client.execute(request.getInputStream(), endpoint[1], subscriberCookie);
             addCookies(apiResponse, response);
+            response.setStatus(apiResponse.getStatus().getCode());
             response.getWriter().println(GsonHelper.getGsonWithPrettyPrint().toJson(apiResponse));
         }
     }

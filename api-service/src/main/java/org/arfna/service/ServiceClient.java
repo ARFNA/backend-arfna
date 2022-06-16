@@ -51,25 +51,22 @@ public class ServiceClient {
             String payload = generateJsonPayloadFromHttpStream(jsonStream);
             if (endpoint.contains(ESupportedEndpoints.DUMMY.getEndpointName())) {
                 MethodResponse methodResponse = getDummyResponse(payload);
-                apiResponse = generateSuccessResponse(methodResponse);
+                apiResponse = generateResponse(methodResponse, false);
             } else if (endpoint.contains(ESupportedEndpoints.MUTATE_SUBSCRIBER.getEndpointName())) {
                 MethodResponse methodResponse = getMutateSubscriberResponse(payload);
-                apiResponse = generateSuccessResponse(methodResponse);
+                apiResponse = generateResponse(methodResponse, false);
             } else if (endpoint.contains(ESupportedEndpoints.MUTATE_POST_TABLE.getEndpointName())) {
                 MethodResponse methodResponse = getMutatePostTableResponse(payload, loggedInSubscriber);
-                apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
-                        generateSuccessResponse(methodResponse);
+                apiResponse = generateResponse(methodResponse, true);
             } else if (endpoint.contains(ESupportedEndpoints.GET_POST.getEndpointName())) {
                 MethodResponse methodResponse = getPostsResponse(payload);
-                apiResponse = generateSuccessResponse(methodResponse);
+                apiResponse = generateResponse(methodResponse, false);
             } else if (endpoint.contains(ESupportedEndpoints.READ_SUBSCRIBER_COOKIE.getEndpointName())) {
                 MethodResponse methodResponse = getSubscriberCookieResponse(payload, loggedInSubscriber);
-                apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
-                        generateSuccessResponse(methodResponse);
+                apiResponse = generateResponse(methodResponse, true);
             } else if (endpoint.contains(ESupportedEndpoints.IMAGE_ID.getEndpointName())) {
                 MethodResponse methodResponse = imageIdResponse(payload, loggedInSubscriber);
-                apiResponse = methodResponse.isUnauthorized() ? generateNotAuthorizedResponse() :
-                        generateSuccessResponse(methodResponse);
+                apiResponse = generateResponse(methodResponse, true);
             }
             else {
                 ArfnaLogger.error(this.getClass(), endpoint + " is not a supported endpoint");
@@ -82,8 +79,21 @@ public class ServiceClient {
         return apiResponse;
     }
 
+    private ApiResponse generateResponse(MethodResponse methodResponse, boolean requiresAuthCheck) {
+        if (methodResponse.isUnauthorized()) {
+            return generateNotAuthorizedResponse();
+        } else if (requiresAuthCheck && !methodResponse.passedValidation()) {
+            return generateValidationFailureResponse();
+        }
+        return generateSuccessResponse(methodResponse);
+    }
+
     private ApiResponse generateNotAuthorizedResponse() {
         return generateFailureResponse(401, "User is not authorized to make API call");
+    }
+
+    private ApiResponse generateValidationFailureResponse() {
+        return generateFailureResponse(412, "Validation checks not passed. Tables not modified.");
     }
 
     private ApiResponse generateFailureResponse(int code, String reason) {
