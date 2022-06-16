@@ -7,6 +7,7 @@ public enum ESupportedEndpoints {
     MUTATE_POST_TABLE("mpost"),
     GET_POST("gpost"),
     READ_SUBSCRIBER_COOKIE("rsubscriber"),
+    IMAGE_ID("rimageid")
     ;
 
     private String endpointName;

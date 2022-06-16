@@ -51,6 +51,13 @@ public class ArfnaUtility {
         return util.getResponse(jsonPayload, version, subscriber);
     }
 
+    public MethodResponse imageIdResponse(String jsonPayload, Optional<Subscriber> subscriber) {
+        ArfnaLogger.info(this.getClass(), "Received request to image id api");
+        EVersion version = getVersion(jsonPayload);
+        ImageIdUtility util = new ImageIdUtility();
+        return util.getResponse(jsonPayload, version, subscriber);
+    }
+
     private EVersion getVersion(String jsonPayload) {
         ArfnaVersion version = GsonHelper.getGson().fromJson(jsonPayload, ArfnaVersion.class);
         return version.getVersion();

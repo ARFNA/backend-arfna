@@ -17,6 +17,9 @@ public class CacheHelper {
 
     public static String addValue(Object value) {
         String generatedKey = RandomStringUtils.randomAlphanumeric(30);
+        while (COOKIE_CACHE.containsKey(generatedKey)) {
+            generatedKey = RandomStringUtils.randomAlphanumeric(30);
+        }
         COOKIE_CACHE.put(generatedKey, value);
         return generatedKey;
     }

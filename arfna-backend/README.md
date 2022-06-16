@@ -163,6 +163,21 @@ It will throw an unauthorized error if the cookie is not valid anymore.
 }
 ```
 
+## Working with the image storage S3 DB (`rimageid`)
+This API is used for interacting and reading keys from S3, as well as ensuring a user has the right permissions with a post and the ARFNA application prior to pushing files to the S3 database. It requires a user to be logged in as a writer or above in order to use.
+
+**Generating a key for image storage**
+It will throw an unauthorized error if the subscriber is not the author of the given post; a subscriber can override this check if the subscriber is at least of `maint` role.
+```json
+{
+	"version": "V1",
+	"requestType": "GENERATE_ID",
+	"post": {
+		"id": 7
+	}
+}
+```
+
 
 ## Validation and Error Codes
 Every response is sent back with the following format
