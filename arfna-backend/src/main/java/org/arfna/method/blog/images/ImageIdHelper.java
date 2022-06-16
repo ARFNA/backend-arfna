@@ -52,4 +52,10 @@ public class ImageIdHelper {
         }
         return generatedId;
     }
+
+    public static void main(String[] args) {
+        ImageIdHelper helper = new ImageIdHelper();
+        System.out.println("Generated ID: " + helper.generateValidId("671ab/9", EVersion.V1));
+        System.out.println("SUCCESS!");
+    }
 }
