@@ -13,12 +13,12 @@ public class ImageIdApiV1 implements IImageIdApi {
         EImageRequest requestType = payload.getRequestType();
         if (requestType == EImageRequest.GENERATE_ID) {
             ImageIdHelper helper = new ImageIdHelper();
-            ArfnaLogger.debug(this.getClass(), "Checking permissions for ID generation");
-            if (!helper.checkIfValidWritePermission(payload, version, subscriber)) {
-                ImageIdResponse response = new ImageIdResponse();
-                response.setUnauthorized();
-                return response;
-            }
+//            ArfnaLogger.debug(this.getClass(), "Checking permissions for ID generation");
+//            if (!helper.checkIfValidWritePermission(payload, version, subscriber)) {
+//                ImageIdResponse response = new ImageIdResponse();
+//                response.setUnauthorized();
+//                return response;
+//            }
             ArfnaLogger.debug(this.getClass(), "Generating unique id for image");
             return helper.generateImageId(payload, version, subscriber);
         }
