@@ -80,10 +80,10 @@ public class ServiceClient {
     }
 
     private ApiResponse generateResponse(MethodResponse methodResponse, boolean requiresAuthCheck) {
-        if (methodResponse.isUnauthorized()) {
+        if (requiresAuthCheck && methodResponse.isUnauthorized()) {
             return generateNotAuthorizedResponse();
-        } else if (requiresAuthCheck && !methodResponse.passedValidation()) {
-            return generateValidationFailureResponse();
+        } else if (!methodResponse.passedValidation()) {
+            return generateValidationFailureResponse(methodResponse);
         }
         return generateSuccessResponse(methodResponse);
     }
@@ -92,8 +92,11 @@ public class ServiceClient {
         return generateFailureResponse(401, "User is not authorized to make API call");
     }
 
-    private ApiResponse generateValidationFailureResponse() {
-        return generateFailureResponse(412, "Validation checks not passed. Tables not modified.");
+    private ApiResponse generateValidationFailureResponse(MethodResponse response) {
+        return new ApiResponse.ApiResponseBuilder()
+                .withStatus(new Status(412, "Validation checks not passed. Tables not modified."))
+                .withResponse(response)
+                .build();
     }
 
     private ApiResponse generateFailureResponse(int code, String reason) {
