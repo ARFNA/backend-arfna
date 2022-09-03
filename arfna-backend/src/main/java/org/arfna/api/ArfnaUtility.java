@@ -23,11 +23,11 @@ public class ArfnaUtility {
         return util.getResponse(jsonPayload, version);
     }
 
-    public MethodResponse getMutateSubscriberResponse(String jsonPayload) {
+    public MethodResponse getMutateSubscriberResponse(String jsonPayload, Optional<Subscriber> subscriber) {
         ArfnaLogger.info(this.getClass(), "Received mutate subscriber call");
         EVersion version = getVersion(jsonPayload);
         MutateSubscriberUtility util = new MutateSubscriberUtility();
-        return util.getResponse(jsonPayload, version);
+        return util.getResponse(jsonPayload, version, subscriber);
     }
 
     public MethodResponse getMutatePostTableResponse(String jsonPayload, Optional<Subscriber> subscriber) {

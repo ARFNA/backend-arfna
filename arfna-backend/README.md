@@ -65,6 +65,14 @@
 }
 ```
 
+**Logging out**
+```json
+{
+    "version": "V1",
+    "mutation": "LOGOUT"
+}
+```
+
 ## Mutating the Blog Post Table (`/mpost`)
 This API cannot be used unless a valid cookie has been transferred using the LOGIN API from the mutate subscriber API.
 
