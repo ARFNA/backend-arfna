@@ -10,6 +10,7 @@ import org.arfna.util.gson.GsonHelper;
 import org.arfna.util.logger.ArfnaLogger;
 
 import java.util.List;
+import java.util.Optional;
 
 public class MutateSubscriberUtil {
 
@@ -69,6 +70,12 @@ public class MutateSubscriberUtil {
         if (subscriberInTable.getName()!= null && subscriberInTable.getPassword() != null)
             return response.setSubscriberType(ESubscriberType.NAME_AND_EMAIL_AND_PASSWORD);
         return response.setSubscriberType(ESubscriberType.UNKNOWN);
+    }
+
+    public MutateSubscribersResponse logout(Optional<Subscriber> loggedInSubscriber) {
+        MutateSubscribersResponse response = new MutateSubscribersResponse();
+        loggedInSubscriber.ifPresent(response::addDataToRemove);
+        return response;
     }
 
     private void addSubscriberExistsResponse(MutateSubscribersResponse response, Subscriber potentialSubscriberInTable) {

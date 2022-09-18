@@ -31,4 +31,8 @@ public class CacheHelper {
         }
         return Optional.empty();
     }
+
+    public static void forceExpiration(String key) {
+        COOKIE_CACHE.remove(key);
+    }
 }

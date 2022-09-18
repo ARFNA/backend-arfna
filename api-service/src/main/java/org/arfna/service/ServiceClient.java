@@ -20,9 +20,9 @@ public class ServiceClient {
         return util.getDummyResponse(json);
     }
 
-    private MethodResponse getMutateSubscriberResponse(String json) {
+    private MethodResponse getMutateSubscriberResponse(String json, Optional<Subscriber> loggedInSubscriber) {
         ArfnaUtility util = new ArfnaUtility();
-        return util.getMutateSubscriberResponse(json);
+        return util.getMutateSubscriberResponse(json, loggedInSubscriber);
     }
 
     private MethodResponse getMutatePostTableResponse(String json, Optional<Subscriber> loggedInSubscriber) {
@@ -53,7 +53,7 @@ public class ServiceClient {
                 MethodResponse methodResponse = getDummyResponse(payload);
                 apiResponse = generateResponse(methodResponse, false);
             } else if (endpoint.contains(ESupportedEndpoints.MUTATE_SUBSCRIBER.getEndpointName())) {
-                MethodResponse methodResponse = getMutateSubscriberResponse(payload);
+                MethodResponse methodResponse = getMutateSubscriberResponse(payload, loggedInSubscriber);
                 apiResponse = generateResponse(methodResponse, false);
             } else if (endpoint.contains(ESupportedEndpoints.MUTATE_POST_TABLE.getEndpointName())) {
                 MethodResponse methodResponse = getMutatePostTableResponse(payload, loggedInSubscriber);
