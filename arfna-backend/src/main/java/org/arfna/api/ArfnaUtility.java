@@ -58,6 +58,13 @@ public class ArfnaUtility {
         return util.getResponse(jsonPayload, version, subscriber);
     }
 
+    public MethodResponse emailResponse(String jsonPayload) {
+        ArfnaLogger.info(this.getClass(), "Received request to email api");
+        EVersion version = getVersion(jsonPayload);
+        EmailUtility util = new EmailUtility();
+        return util.getResponse(jsonPayload, version);
+    }
+
     private EVersion getVersion(String jsonPayload) {
         ArfnaVersion version = GsonHelper.getGson().fromJson(jsonPayload, ArfnaVersion.class);
         return version.getVersion();
