@@ -178,6 +178,22 @@ It will throw an unauthorized error if the subscriber is not the author of the g
 }
 ```
 
+## Sending Emails (`email`)
+This API is used for all email sending needs.
+
+**Submitting Contact Us Form**
+
+Do make sure when sending this form it is as clean as possible (ex. the same line breaks as the user submitted etc...)
+```json
+{
+  "version": "V1",
+	"requestType": "CONTACT_US",
+	"fromField": {
+		"Roshnee": "roshnee@arfna.org"
+	},
+	"body": "Hi,\n\nThis is my message.\n\nRosh"
+}
+```
 
 ## Validation and Error Codes
 Every response is sent back with the following format

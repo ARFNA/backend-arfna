@@ -9,10 +9,10 @@ public class EmailApiV1 implements IEmailApi {
     @Override
     public EmailResponse getResponse(EmailPayload payload, EVersion version) {
         EEmailRequest requestType = payload.getRequestType();
-        EmailResponse response = new EmailResponse();
         if (requestType == EEmailRequest.CONTACT_US) {
-            return response;
+            return new EmailHelper().sendEmailForContactUs(payload);
         }
+        EmailResponse response = new EmailResponse();
         response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_API));
         return response;
     }

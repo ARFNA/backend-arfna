@@ -3,19 +3,24 @@ package org.arfna.method.email;
 import com.google.gson.annotations.Expose;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Map;
 
 public class EmailPayload implements Serializable {
     private static final long serialVersionUID = -6175556810062077094L;
 
     @Expose private EEmailRequest requestType;
-    @Expose private List<String> toFields;
+    @Expose private Map<String, String> toFields; // this is name=>email
+    @Expose private Map<String, String> fromField; // this is name=>email
     @Expose private String subject;
     @Expose private String body;
 
-    public EmailPayload withToFields(List<String> toFields) {
+    public EmailPayload withToFields(Map<String, String> toFields) {
         this.toFields = toFields;
         return this;
+    }
+
+    public Map<String, String> getFromField() {
+        return fromField;
     }
 
     public EmailPayload withSubject(String subject) {
@@ -28,7 +33,7 @@ public class EmailPayload implements Serializable {
         return this;
     }
 
-    public List<String> getToFields() {
+    public Map<String, String> getToFields() {
         return toFields;
     }
 
