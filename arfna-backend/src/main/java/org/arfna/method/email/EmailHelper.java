@@ -10,15 +10,17 @@ import org.arfna.util.security.SecurityKey;
 
 public class EmailHelper {
 
+    private static final String CONTACT_US_FROM_NAME = "info";
+    private static final String CONTACT_US_FROM_ADDRESS = "info@arfna.org";
     private static final String CONTACT_US_RECIPIENT_NAME = "Roshnee";
     private static final String CONTACT_US_RECIPIENT_ADDRESS = "roshnee@arfna.org";
 
     public EmailResponse sendEmailForContactUs(EmailPayload payload) {
         Email email = new Email();
-        payload.getFromField().forEach(email::setFrom);
+        email.setFrom(CONTACT_US_FROM_NAME, CONTACT_US_FROM_ADDRESS);
         email.addRecipient(CONTACT_US_RECIPIENT_NAME, CONTACT_US_RECIPIENT_ADDRESS);
         email.setSubject("Contact Us! - Web Form Submission");
-        email.setPlain(payload.getBody());
+        email.setPlain(appendEmailsToBody(payload));
         MailerSend ms = new MailerSend();
         ms.setToken(SecurityKey.getSecurityKeys().getMailerKey().getApiToken());
         EmailResponse response = new EmailResponse();
@@ -32,6 +34,19 @@ public class EmailHelper {
                 );
             return response;
         }
+    }
+
+    private String appendEmailsToBody(EmailPayload payload) {
+        String messageBody = payload.getBody();
+        StringBuilder notificationMessage = new StringBuilder()
+                .append("This message was sent from: \n");
+        payload.getFromField()
+                .forEach((name, email) ->
+                        notificationMessage.append(name)
+                        .append(": ")
+                        .append(email)
+                        .append("\n"));
+        return messageBody + "\n\n" + notificationMessage;
     }
 
 }
