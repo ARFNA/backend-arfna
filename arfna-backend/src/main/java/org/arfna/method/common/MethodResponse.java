@@ -17,6 +17,7 @@ public class MethodResponse implements Serializable {
 
     private transient boolean sendCookie;
     private transient List<Object> dataToPersist = new ArrayList<>();
+    private transient List<Object> dataToUnpersist = new ArrayList<>();
     private transient boolean isUnauthorized;
 
     public MethodResponse addDataToSend(Object toSend) {
@@ -27,6 +28,17 @@ public class MethodResponse implements Serializable {
 
     public List<Object> getDataToPersist() {
         return dataToPersist;
+    }
+
+    /**
+     * This method will remove any data that was being persisted
+     */
+    public void addDataToRemove(Object toRevoke) {
+        dataToUnpersist.add(toRevoke);
+    }
+
+    public List<Object> getDataToRevoke() {
+        return dataToUnpersist;
     }
 
     public void setUnauthorized() {
