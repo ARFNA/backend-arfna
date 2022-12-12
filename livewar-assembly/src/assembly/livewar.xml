@@ -20,7 +20,7 @@
       <unpack>true</unpack>
       <useTransitiveDependencies>false</useTransitiveDependencies>
       <includes>
-        <include>${project.groupId}:livewar-thewebapp</include>
+        <include>${project.groupId}:servlet</include>
         <include>${project.groupId}:livewar-server-bootstrap</include>
       </includes>
     </dependencySet>

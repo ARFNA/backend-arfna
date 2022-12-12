@@ -67,7 +67,7 @@ public class ServerMain
                 // Configuring from Development Base
                 context.setBaseResource(new PathResource(basePath.resolve("src/main/webapp")));
                 // Add webapp compiled classes & resources (copied into place from src/main/resources)
-                Path classesPath = basePath.resolve("target/thewebapp/WEB-INF/classes");
+                Path classesPath = basePath.resolve("target/sample-servlet/WEB-INF/classes");
                 context.setExtraClasspath(classesPath.toAbsolutePath().toString());
                 server.setDumpAfterStart(true);
                 break;
@@ -96,7 +96,7 @@ public class ServerMain
         }
 
         // We are in development mode, likely building and testing from an IDE.
-        Path devPath = new File("../thewebapp").toPath().toRealPath();
+        Path devPath = new File("../server").toPath().toRealPath();
         if (Files.exists(devPath) && Files.isDirectory(devPath))
         {
             this.basePath = devPath;
