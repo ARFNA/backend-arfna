@@ -1,5 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: ./README.md
-    destination: /
+  - source: ./livewar-assembly/target/livewar-example.war
+    destination: /arfna-backend.war
+  - source: ./scripts/
+    destination: /scripts/
