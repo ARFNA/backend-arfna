@@ -8,3 +8,5 @@ phases:
 artifacts:
   files:
     - livewar-assembly/target/livewar-example.war
+    - appspec.yml
+    - scripts/
