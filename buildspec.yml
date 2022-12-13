@@ -9,4 +9,5 @@ artifacts:
   files:
     - livewar-assembly/target/livewar-example.war
     - appspec.yml
-    - scripts/
+    - scripts/startup.sh
+    - scripts/shutdown.sh
