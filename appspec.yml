@@ -7,4 +7,4 @@ hooks:
       runas: ec2-user
   ApplicationStart:
     - location: scripts/startup.sh
-      runas: ec2-user
+      runas: root
