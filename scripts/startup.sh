@@ -1,4 +1,7 @@
 #!/bin/bash
 
 echo "About to start up!"
-java -jar livewar-assembly/target/livewar-example.war --add-to-startd=jsp
+current_dir=$(pwd)
+war_file=${current_dir}/livewar-assembly/target/livewar-example.war
+echo war_file
+sudo java -jar ${war_file} --add-to-startd=jsp
