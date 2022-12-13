@@ -1,17 +1,17 @@
 version: 0.0
 os: linux
 files:
-#  - source: ./livewar-assembly/target/livewar-example.war
-#    destination: /arfna-backend.war
-  - source: ./scripts/
-    destination: /scripts/
+  - source: ./livewar-assembly/target/livewar-example.war
+    destination: /server/arfna-backend.war
+  - source: ./server/scripts/
+    destination: /server/scripts/
 
 hooks:
   ApplicationStop:
-    - location: /scripts/shutdown.sh
+    - location: /server/scripts/shutdown.sh
       timeout: 180
       runas: root
   ApplicationStart:
-    - location: /scripts/startup.sh
+    - location: /server/scripts/startup.sh
       timeout: 180
       runas: root
