@@ -11,3 +11,4 @@ artifacts:
     - appspec.yml
     - scripts/startup.sh
     - scripts/shutdown.sh
+    - scripts/validate.sh
