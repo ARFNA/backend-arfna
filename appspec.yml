@@ -4,7 +4,7 @@ os: linux
 hooks:
   ApplicationStop:
     - location: scripts/shutdown.sh
-      runas: root
+      runas: ec2-user
   ApplicationStart:
     - location: scripts/startup.sh
-      runas: root
+      runas: ec2-user
