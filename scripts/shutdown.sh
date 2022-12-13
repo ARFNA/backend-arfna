@@ -1,2 +1,2 @@
 echo "About to shut down!"
-rm -rf /server
+sudo kill $(lsof -t -i:8080)
