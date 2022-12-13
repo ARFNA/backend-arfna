@@ -3,9 +3,9 @@ os: linux
 files:
   - source: livewar-assembly/target/livewar-example.war
     destination: /server/arfna-backend.war
-  - source: server/scripts/startup.sh
+  - source: scripts/startup.sh
     destination: /server/scripts/startup.sh
-  - source: server/scripts/shutdown.sh
+  - source: scripts/shutdown.sh
     destination: /server/scripts/shutdown.sh
 
 hooks:
