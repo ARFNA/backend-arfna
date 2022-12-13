@@ -18,12 +18,20 @@ public class SecurityKey {
     @SerializedName("aws_role")
     private AwsIamKey awsIamKey;
 
+    @Expose
+    @SerializedName("mailersend")
+    private MailerKey mailerKey;
+
     private SecurityKey() {
         // restrict instantiation
     }
 
     public AwsIamKey getAwsIamKey() {
         return awsIamKey;
+    }
+
+    public MailerKey getMailerKey() {
+        return mailerKey;
     }
 
     public static SecurityKey getSecurityKeys() {

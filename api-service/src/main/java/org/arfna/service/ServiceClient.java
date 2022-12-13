@@ -45,6 +45,11 @@ public class ServiceClient {
         return util.imageIdResponse(json, loggedInSubscriber);
     }
 
+    private MethodResponse emailResponse(String json) {
+        ArfnaUtility util = new ArfnaUtility();
+        return util.emailResponse(json);
+    }
+
     public ApiResponse execute(InputStream jsonStream, String endpoint, Optional<Subscriber> loggedInSubscriber) {
         ApiResponse apiResponse;
         try {
@@ -67,6 +72,9 @@ public class ServiceClient {
             } else if (endpoint.contains(ESupportedEndpoints.IMAGE_ID.getEndpointName())) {
                 MethodResponse methodResponse = imageIdResponse(payload, loggedInSubscriber);
                 apiResponse = generateResponse(methodResponse, true);
+            } else if (endpoint.contains(ESupportedEndpoints.EMAIL.getEndpointName())) {
+                MethodResponse methodResponse = emailResponse(payload);
+                apiResponse = generateResponse(methodResponse, false);
             }
             else {
                 ArfnaLogger.error(this.getClass(), endpoint + " is not a supported endpoint");

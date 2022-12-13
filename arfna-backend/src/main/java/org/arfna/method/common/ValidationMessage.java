@@ -15,6 +15,15 @@ public class ValidationMessage implements Serializable {
         this.message = msg.getMessage();
     }
 
+    private ValidationMessage(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
+
+    public static ValidationMessage createCustomValidation(int code, String message) {
+        return new ValidationMessage(code, message);
+    }
+
     public int getCode() {
         return code;
     }
