@@ -28,4 +28,4 @@ jobs:
         restore-keys: ${{ runner.os }}-m2
 
     - name: Build with Maven
-      run: mvn clean -pl '!livewar-assembly' install -U -B test --file arfna-main/pom.xml
+      run: mvn clean install -U -B test --file arfna-main/pom.xml -pl '!livewar-assembly'
