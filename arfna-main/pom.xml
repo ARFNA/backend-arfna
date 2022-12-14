@@ -18,17 +18,4 @@
         <module>../livewar-assembly</module>
     </modules>
          
-    <profiles>
-        <profile>
-            <id>ci-git</id>
-            <modules>
-                <module>../arfna-backend</module>
-                <module>../api-service</module>
-                <module>../server</module>
-                <module>../theserver</module>
-                <module>../server-bootstrap</module>
-            </modules> 
-        </profile>
-    </profiles>
-
 </project>
