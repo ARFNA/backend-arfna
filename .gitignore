@@ -6,4 +6,5 @@
 *.idea
 *.log
 *hibernate.cfg.xml
+/theserver/target/
 /arfna-backend/src/main/resources/org.arfna.util.security/credentials.json

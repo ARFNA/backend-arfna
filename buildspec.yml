@@ -1,0 +1,14 @@
+version: 0.1
+
+phases:
+  build:
+    commands:
+      - echo Build started on `date`
+      - mvn clean install -f arfna-main/pom.xml
+artifacts:
+  files:
+    - livewar-assembly/target/livewar-example.war
+    - appspec.yml
+    - scripts/startup.sh
+    - scripts/shutdown.sh
+    - scripts/validate.sh
