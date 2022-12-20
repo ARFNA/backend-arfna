@@ -12,6 +12,10 @@ public class MailerKey implements Serializable {
     @SerializedName("api_token")
     private String apiToken;
 
+    MailerKey(String apiToken) {
+        this.apiToken = apiToken;
+    }
+
     public String getApiToken() {
         return apiToken;
     }

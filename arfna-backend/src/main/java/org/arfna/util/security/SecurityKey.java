@@ -26,6 +26,20 @@ public class SecurityKey {
         // restrict instantiation
     }
 
+    static SecurityKey builder() {
+        return new SecurityKey();
+    }
+
+    SecurityKey withAwsCredentials(String awsAccessKey, String awsSecretToken) {
+        this.awsIamKey = new AwsIamKey(awsAccessKey, awsSecretToken);
+        return this;
+    }
+
+    SecurityKey withMailerSendCredentials(String mailerSendToken) {
+        this.mailerKey = new MailerKey(mailerSendToken);
+        return this;
+    }
+
     public AwsIamKey getAwsIamKey() {
         return awsIamKey;
     }
@@ -34,14 +48,4 @@ public class SecurityKey {
         return mailerKey;
     }
 
-    public static SecurityKey getSecurityKeys() {
-        if (SECURITY_KEY == null) {
-            try (InputStream stream = ResourceHelper.getResourceAsStream(SecurityKey.class, "credentials.json")) {
-                SECURITY_KEY = GsonHelper.getGson().fromJson(new InputStreamReader(stream), SecurityKey.class);
-            } catch (IOException e) {
-                ArfnaLogger.exception(SecurityKey.class, "Unable to get security keys: " + e.getMessage(), e);
-            }
-        }
-        return SECURITY_KEY;
-    }
 }
