@@ -9,6 +9,11 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+    <properties>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+    </properties>
+
     <modules>
         <module>../arfna-backend</module>
         <module>../api-service</module>
@@ -17,5 +22,5 @@
         <module>../server-bootstrap</module>
         <module>../livewar-assembly</module>
     </modules>
-         
+
 </project>

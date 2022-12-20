@@ -1,8 +1,11 @@
 package org.arfna.database.entity;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "subscribers")
@@ -12,22 +15,28 @@ public class Subscriber implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Expose
     private int id;
 
     @Column(name = "name")
+    @Expose
     private String name;
 
     @Column(name = "email_address")
+    @Expose
     private String emailAddress;
 
     @Column(name = "password")
+    @Expose
     private String password;
 
     @Column(name = "role")
+    @Expose
     private String role = "none";
 
-    @OneToMany(mappedBy="id")
-    private Set<Post> posts;
+    @OneToMany(mappedBy="author", fetch= FetchType.EAGER)
+    @Expose
+    private List<Post> posts;
 
 
     public int getId() {
@@ -75,18 +84,34 @@ public class Subscriber implements Serializable {
         return this;
     }
 
-    public Set<Post> getPosts() {
-        return posts;
+    public List<Post> getPosts() {
+        if (posts == null)
+            return new ArrayList<>();
+        return this.posts;
     }
 
     public void addPost(Post p) {
+        if (posts == null)
+            posts = new ArrayList<>();
         this.posts.add(p);
     }
 
-    public void copy(Subscriber other) {
-        other.setName(this.getName());
-        other.setEmailAddress(this.getEmailAddress());
-        other.setPassword(this.getPassword());
-        other.setRole(this.getRole());
+    /**
+     * USE WITH CARE
+     * Do not use this when writing to the database, but when posting a response
+     */
+    public void setPostsToNull() {
+        this.posts = null;
+    }
+
+    public void copyNewInformation(Subscriber other) {
+        if (this.getName() != null && !this.getName().equals(other.getName()))
+            other.setName(this.getName());
+        if (this.getEmailAddress() != null && !this.getEmailAddress().equals(other.getEmailAddress()))
+            other.setEmailAddress(this.getEmailAddress());
+        if (this.getPassword() != null && !this.getPassword().equals(other.getPassword()))
+            other.setPassword(this.getPassword());
+        if (this.getRole() != null && !this.getRole().equals("none") && !this.getRole().equals(other.getRole()))
+            other.setRole(this.getRole());
     }
 }

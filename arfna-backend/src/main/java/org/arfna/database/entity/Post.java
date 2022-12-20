@@ -1,5 +1,7 @@
 package org.arfna.database.entity;
 
+import com.google.gson.annotations.Expose;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -12,40 +14,57 @@ public class Post implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @Expose
     private int id;
 
     @ManyToOne
     @JoinColumn(name="s_id")
+    @Expose
     private Subscriber author;
 
     @Column(name="title")
+    @Expose
     private String title;
 
+    @Column(name="summary")
+    @Expose
+    private String summary;
+
     @Column(name="markdown")
+    @Expose
     private String markdown;
 
     @Column(name="thumbnail")
+    @Expose
     private String thumbnail;
 
     @Column(name="is_submitted")
-    private boolean isSubmitted;
+    @Expose
+    private Boolean isSubmitted;
 
     @Column(name="is_accepted")
-    private boolean isAccepted;
+    @Expose
+    private Boolean isAccepted;
 
     @Column(name="is_published")
-    private boolean isPublished;
+    @Expose
+    private Boolean isPublished;
 
     @Column(name="created_at")
+    @Expose
     private Date createdAt;
 
     @Column(name="last_updated")
+    @Expose
     private Date lastUpdated;
 
     @PrePersist
     public void onCreate() {
         createdAt = new Date();
         lastUpdated = new Date();
+        this.isSubmitted = false;
+        this.isAccepted = false;
+        this.isPublished = false;
     }
 
     @PreUpdate
@@ -77,6 +96,15 @@ public class Post implements Serializable {
 
     public Post setTitle(String title) {
         this.title = title;
+        return this;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public Post setSummary(String summary) {
+        this.summary = summary;
         return this;
     }
 
@@ -126,11 +154,19 @@ public class Post implements Serializable {
     }
 
     public void copy(Post other) {
-        other.setTitle(this.getTitle());
-        other.setMarkdown(this.getMarkdown());
-        other.setThumbnail(this.getThumbnail());
-        other.setSubmitted(this.isSubmitted());
-        other.setAccepted(this.isAccepted());
-        other.setPublished(this.isPublished());
+        if (this.getTitle() != null && !this.getTitle().equals(other.getTitle()))
+            other.setTitle(this.getTitle());
+        if (this.getMarkdown() != null && !this.getMarkdown().equals(other.getMarkdown()))
+            other.setMarkdown(this.getMarkdown());
+        if (this.getSummary() != null && !this.getSummary().equals(other.getSummary()))
+            other.setSummary(this.getSummary());
+        if (this.getThumbnail() != null && !this.getThumbnail().equals(other.getThumbnail()))
+            other.setThumbnail(this.getThumbnail());
+        if (this.isSubmitted != null && this.isSubmitted != other.isSubmitted)
+            other.setSubmitted(this.isSubmitted());
+        if (this.isAccepted != null && this.isAccepted != other.isAccepted)
+            other.setAccepted(this.isAccepted());
+        if (this.isPublished != null && this.isPublished != other.isPublished)
+            other.setPublished(this.isPublished());
     }
 }
