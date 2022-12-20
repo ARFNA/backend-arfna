@@ -2,8 +2,8 @@ package org.arfna.util.security;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import org.arfna.database.DatabaseUtil;
 import org.arfna.util.environment.EnvironmentHelper;
-import software.amazon.awssdk.auth.credentials.WebIdentityTokenFileCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.secretsmanager.SecretsManagerClient;
 import software.amazon.awssdk.services.secretsmanager.model.GetSecretValueRequest;
@@ -19,13 +19,18 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SecurityUtility {
 
     private static final String CREDENTIALS_SECRET_NAME = "credentials";
     private static final String LOCAL_CREDENTIALS_FILE_NAME = "credentials.json";
+    private static final String HIBERNATE_PROPS_SECRET = "hibernate_credentials";
+    private static final String LOCAL_HIBERNATE_CREDENTIALS = "hibernate_creds.json";
+
     private static SecurityKey SECURITY_KEY;
+    private static Map HIBERNATE_PROPERTIES_MAP;
     private static SecretsManagerClient SECRET_CLIENT;
 
 
@@ -34,6 +39,19 @@ public class SecurityUtility {
             loadSecurityKey();
         }
         return SECURITY_KEY;
+    }
+
+    public static Map getHibernatePropertiesCredentials() {
+        if (HIBERNATE_PROPERTIES_MAP == null) {
+            loadHibernatePropertiesMap();
+        }
+        return HIBERNATE_PROPERTIES_MAP;
+    }
+
+    private static void loadHibernatePropertiesMap() {
+        HIBERNATE_PROPERTIES_MAP = EnvironmentHelper.isRuntimeProd() ?
+                loadHibernateProperties(getSecretString(HIBERNATE_PROPS_SECRET)) :
+                loadHibernateProperties(getHibernateProps());
     }
 
     private static void loadSecurityKey() {
@@ -45,8 +63,13 @@ public class SecurityUtility {
         return GsonHelper.getGsonWithPrettyPrint().fromJson(getSecurityKeyJsonDev(), SecurityKey.class);
     }
 
+    private static Map loadHibernateProperties(String hibernateJson) {
+        return GsonHelper.getGson().fromJson(hibernateJson, Map.class);
+    }
+
     private static SecurityKey getSecurityKeyFromSecret() {
         String secret = getSecretString(CREDENTIALS_SECRET_NAME);
+        assert secret != null;
         JsonObject root = JsonParser.parseString(secret).getAsJsonObject();
         return SecurityKey
             .builder()
@@ -81,14 +104,22 @@ public class SecurityUtility {
         return SECRET_CLIENT;
     }
 
+    private static String getHibernateProps() {
+        return readJsonFromFile(DatabaseUtil.class, LOCAL_HIBERNATE_CREDENTIALS);
+    }
+
     private static String getSecurityKeyJsonDev() {
-        try (InputStream inputStream = ResourceHelper.getResourceAsStream(SecurityKey.class, LOCAL_CREDENTIALS_FILE_NAME)) {
+        return readJsonFromFile(SecurityKey.class, LOCAL_CREDENTIALS_FILE_NAME);
+    }
+
+    private static String readJsonFromFile(Class<?> clazz, String resourceName) {
+        try (InputStream inputStream = ResourceHelper.getResourceAsStream(clazz, resourceName)) {
             return new BufferedReader(
-                new InputStreamReader(inputStream, StandardCharsets.UTF_8))
-                .lines()
-                .collect(Collectors.joining("\n"));
+                    new InputStreamReader(inputStream, StandardCharsets.UTF_8))
+                    .lines()
+                    .collect(Collectors.joining("\n"));
         } catch (IOException e) {
-            ArfnaLogger.exception(SecurityUtility.class, "Unable to get security keys: " + e.getMessage(), e);
+            ArfnaLogger.exception(SecurityUtility.class, resourceName + ": Unable to get security keys: " + e.getMessage(), e);
         }
         return null;
     }
