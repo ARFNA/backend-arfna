@@ -4,7 +4,7 @@ echo "About to start up!"
 current_dir=$(pwd)
 deployment_group_deployment_dir=${current_dir}/deployment-root/$DEPLOYMENT_GROUP_ID/$DEPLOYMENT_ID/deployment-archive
 deployment_group_war_file=${deployment_group_deployment_dir}/livewar-assembly/target/livewar-example.war
-deployment_dir=/deployemnt
+deployment_dir=/deployment
 log_file=${deployment_dir}/logs.txt
 echo "Copying file to main deployment"
 war_file=${deployment_dir}/arfna-backend.war
