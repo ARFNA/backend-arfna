@@ -34,9 +34,18 @@ public class MutatePostResponse extends MethodResponse implements Serializable {
 
     private void prepareForSerialization() {
         if (this.allPosts != null)
-            this.allPosts.forEach(x -> x.setAuthor(null));
-        if (this.post != null)
-            this.post.setAuthor(null);
+            this.allPosts.stream().filter(x -> x.getAuthor() != null).forEach(x -> {
+                x.getAuthor().setPostsToNull();
+                x.getAuthor().setPassword(null);
+                x.getAuthor().setRole(null);
+                x.getAuthor().setEmailAddress(null);
+            });
+        if (this.post != null && this.post.getAuthor() != null) {
+            this.post.getAuthor().setPostsToNull();
+            this.post.getAuthor().setPassword(null);
+            this.post.getAuthor().setRole(null);
+            this.post.getAuthor().setEmailAddress(null);
+        }
     }
 
 }
