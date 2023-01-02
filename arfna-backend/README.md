@@ -77,6 +77,9 @@
 This API cannot be used unless a valid cookie has been transferred using the LOGIN API from the mutate subscriber API.
 
 **Getting all posts that subscriber has authored**
+
+
+If the role is admin, it will get all posts greater than or equal to submitted for the admin to see. 
 ```json
 {
     "version": "V1",
