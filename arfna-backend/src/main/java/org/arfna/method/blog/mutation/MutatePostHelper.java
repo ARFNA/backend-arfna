@@ -10,6 +10,7 @@ import org.arfna.util.logger.ArfnaLogger;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MutatePostHelper {
 
@@ -22,8 +23,54 @@ public class MutatePostHelper {
             return response;
         }
         List<Post> posts = fromTableSubscriber.getPosts();
+        if (subscriber.getRole().equals("admin")) {
+            ArfnaLogger.info(this.getClass(), "Admin role! So getting all user >=submitted posts");
+            return getAllPosts(posts, version, subscriber);
+        }
         response.setAllPosts(posts);
         return response;
+    }
+
+    private MutatePostResponse getAllPosts(List<Post> posts, EVersion version, Subscriber subscriber) {
+        MutatePostResponse response = new MutatePostResponse();
+        ArfnaLogger.debug(this.getClass(), "Getting all submitted posts for all users");
+        List<Post> allSubscriberPosts = version.getDatabaseUtil().getAllPostsForAdminView(subscriber.getId());
+        posts.addAll(allSubscriberPosts);
+        response.setAllPosts(posts);
+        return response;
+    }
+
+    public MutatePostResponse getAcceptedPostsForSubscriber(EVersion version, Subscriber subscriber) {
+        MutatePostResponse allPosts = getPostsForSubscriber(version, subscriber);
+        ArfnaLogger.debug(this.getClass(), "Filtering for accepted posts");
+        List<Post> filteredPosts = allPosts.getAllPosts()
+                .stream()
+                .filter(x -> x.isAccepted() && !x.isPublished())
+                .collect(Collectors.toList());
+        allPosts.setAllPosts(filteredPosts);
+        return allPosts;
+    }
+
+    public MutatePostResponse getSubmittedPostsForSubscriber(EVersion version, Subscriber subscriber) {
+        MutatePostResponse allPosts = getPostsForSubscriber(version, subscriber);
+        ArfnaLogger.debug(this.getClass(), "Filtering for submitted posts");
+        List<Post> filteredPosts = allPosts.getAllPosts()
+                .stream()
+                .filter(x -> x.isSubmitted() && !x.isAccepted() && !x.isPublished())
+                .collect(Collectors.toList());
+        allPosts.setAllPosts(filteredPosts);
+        return allPosts;
+    }
+
+    public MutatePostResponse getPublishedPostsForSubscriber(EVersion version, Subscriber subscriber) {
+        MutatePostResponse allPosts = getPostsForSubscriber(version, subscriber);
+        ArfnaLogger.debug(this.getClass(), "Filtering for published posts");
+        List<Post> filteredPosts = allPosts.getAllPosts()
+                .stream()
+                .filter(Post::isPublished)
+                .collect(Collectors.toList());
+        allPosts.setAllPosts(filteredPosts);
+        return allPosts;
     }
 
     public MutatePostResponse getExistingPost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {
