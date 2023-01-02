@@ -146,10 +146,15 @@
                 </exclusion>
             </exclusions>
         </dependency>
-    <!--        AWS Secrets Manager -->
+    <!--        AWS Secrets Manager and client for secrets -->
     <dependency>
         <groupId>software.amazon.awssdk</groupId>
         <artifactId>secretsmanager</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpclient</artifactId>
+        <version>4.5.2</version>
     </dependency>
 
     </dependencies>
