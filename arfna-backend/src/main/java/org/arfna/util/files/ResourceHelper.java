@@ -13,13 +13,13 @@ public class ResourceHelper {
     public static URL getResourceAsUrl(Class<?> clazz, String filename) {
         return clazz
                 .getClassLoader()
-                .getResource(clazz.getPackage().getName() + File.separator + filename);
+                .getResource(clazz.getPackage().getName() + "/" + filename);
     }
 
     public static InputStream getResourceAsStream(Class<?> clazz, String filename) {
         return clazz
                 .getClassLoader()
-                .getResourceAsStream(clazz.getPackage().getName() + File.separator + filename);
+                .getResourceAsStream(clazz.getPackage().getName() + "/" + filename);
     }
 
 }

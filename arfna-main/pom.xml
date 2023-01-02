@@ -17,5 +17,5 @@
         <module>../server-bootstrap</module>
         <module>../livewar-assembly</module>
     </modules>
-         
+
 </project>

@@ -1,0 +1,6 @@
+// Rename to "hibernate_creds.json" and populate credential values
+{
+  "hibernate.connection.url": "jdbc:mysql://{port}/{tableName}?useSSL=true&serverTimezone=UTC",
+  "hibernate.connection.username": "{userName}",
+  "hibernate.connection.password": "{password}"
+}

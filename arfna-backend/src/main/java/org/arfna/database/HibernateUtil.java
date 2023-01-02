@@ -1,5 +1,6 @@
 package org.arfna.database;
 
+import org.arfna.util.security.SecurityUtility;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -22,6 +23,7 @@ public class HibernateUtil {
         if (sessionFactory == null) {
             registry = new StandardServiceRegistryBuilder()
                     .configure()
+                    .applySettings(SecurityUtility.getHibernatePropertiesCredentials())
                     .build();
             MetadataSources source = new MetadataSources(registry);
             Metadata metadata = source.getMetadataBuilder().build();

@@ -5,5 +5,6 @@
 /api-service/src/main/resources/META-INF
 *.idea
 *.log
-*hibernate.cfg.xml
 /theserver/target/
+/arfna-backend/src/main/resources/org.arfna.util.security/credentials.json
+/arfna-backend/src/main/resources/org.arfna.database/hibernate_creds.json
