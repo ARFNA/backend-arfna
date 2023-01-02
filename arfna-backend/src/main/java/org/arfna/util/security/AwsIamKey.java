@@ -16,6 +16,11 @@ public class AwsIamKey implements Serializable {
     @SerializedName("secret_key")
     private String secretKey;
 
+    AwsIamKey(String accessKey, String secretKey) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+    }
+
     public String getAccessKey() {
         return accessKey;
     }

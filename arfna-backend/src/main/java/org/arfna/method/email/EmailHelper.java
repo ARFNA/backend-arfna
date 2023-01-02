@@ -6,6 +6,7 @@ import com.mailersend.sdk.emails.Email;
 import com.mailersend.sdk.exceptions.MailerSendException;
 import org.arfna.method.common.ValidationMessage;
 import org.arfna.util.security.SecurityKey;
+import org.arfna.util.security.SecurityUtility;
 
 
 public class EmailHelper {
@@ -22,7 +23,7 @@ public class EmailHelper {
         email.setSubject("Contact Us! - Web Form Submission");
         email.setPlain(appendEmailsToBody(payload));
         MailerSend ms = new MailerSend();
-        ms.setToken(SecurityKey.getSecurityKeys().getMailerKey().getApiToken());
+        ms.setToken(SecurityUtility.getSecurityKeys().getMailerKey().getApiToken());
         EmailResponse response = new EmailResponse();
         try {
             MailerSendResponse mailerSendResponse = ms.emails().send(email);
