@@ -188,6 +188,19 @@ public class DatabaseUtil {
         return null;
     }
 
+    public boolean deletePost(int postId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Post post = session.get(Post.class, postId);
+            session.delete(post);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when deleting the post " + postId, e);
+            return false;
+        }
+    }
+
     public Subscriber getSubscriber(int subscriberId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();

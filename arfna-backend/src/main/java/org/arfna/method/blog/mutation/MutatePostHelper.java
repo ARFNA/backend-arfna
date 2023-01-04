@@ -10,6 +10,7 @@ import org.arfna.util.logger.ArfnaLogger;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MutatePostHelper {
@@ -37,6 +38,24 @@ public class MutatePostHelper {
         List<Post> allSubscriberPosts = version.getDatabaseUtil().getAllPostsForAdminView(subscriber.getId());
         posts.addAll(allSubscriberPosts);
         response.setAllPosts(posts);
+        return response;
+    }
+
+    public MutatePostResponse deletePost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {
+        MutatePostResponse response = new MutatePostResponse();
+        Post post = payload.getPost();
+        ArfnaLogger.debug(this.getClass(), "Deleting a post for user");
+        Subscriber subInTable = version.getDatabaseUtil().getSubscriber(subscriber.getId());
+        Set<Integer> postIdsAuthored = subInTable.getPosts().stream().map(Post::getId).collect(Collectors.toSet());
+        if (subInTable.getRole().equals("admin") || postIdsAuthored.contains(post.getId())) {
+            boolean isDeleted = version.getDatabaseUtil().deletePost(post.getId());
+            if (isDeleted)
+                return response;
+            response.addValidationMessage(new ValidationMessage(EValidationMessage.POST_DELETION_FAILED));
+            return response;
+        }
+        ArfnaLogger.warn(this.getClass(), "Unable to delete post because invalid permissions");
+        response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_POST_PERMISSIONS));
         return response;
     }
 

@@ -7,6 +7,7 @@ public enum EPostMutation {
     SAVE,
     SUBMIT,
     ACCEPT,
-    PUBLISH
+    PUBLISH,
+    DELETE
 
 }
