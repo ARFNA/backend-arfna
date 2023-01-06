@@ -15,7 +15,9 @@ public enum EValidationMessage {
     POST_NOT_BELONG_TO_SUBSCRIBER(10, "The given post does not belong to the subscriber"),
     POST_NOT_WRITTEN(11, "There was an error when creating the post in the database"),
     POST_DOES_NOT_EXIST(12, "The post with the given ID does not exist"),
-    SUBSCRIBER_ALREADY_LOGGED_IN(13, "There is already a logged in subscriber. Sign out before logging in again.")
+    SUBSCRIBER_ALREADY_LOGGED_IN(13, "There is already a logged in subscriber. Sign out before logging in again."),
+    INVALID_POST_PERMISSIONS(14, "The user attempting to adjust the post does not have valid permissions"),
+    POST_DELETION_FAILED(15, "The request to delete the post has failed."),
     ;
 
     private int code;

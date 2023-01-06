@@ -150,6 +150,20 @@ _In order to publish a post, you must have the "admin" role_
 }
 ```
 
+**Deleting a post**
+
+_The only people who can delete a post is an admin or the author of that post_
+
+```json
+{
+    "version": "V1",
+    "mutation": "DELETE",
+    "post": {
+        "id": 11
+    }
+}
+```
+
 ## Getting Blog Posts (`/gpost`)
 This API has utilities for getting blog posts that do not require a cookie.
 
