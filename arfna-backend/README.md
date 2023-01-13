@@ -73,6 +73,16 @@
 }
 ```
 
+**Accepting terms of service**
+
+_Requires a subscriber to be logged in with cookie present_
+```json
+{
+    "version": "V1",
+    "mutation": "ACCEPT_TERMS_OF_SERVICE"
+}
+```
+
 ## Mutating the Blog Post Table (`/mpost`)
 This API cannot be used unless a valid cookie has been transferred using the LOGIN API from the mutate subscriber API.
 

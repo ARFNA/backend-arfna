@@ -45,6 +45,11 @@ public class MutateSubscriberApiV1 implements IMutateSubscriberApi {
         } if (payload.getMutation() == ESubscriberMutation.LOGOUT) {
             ArfnaLogger.debug(this.getClass(), "Logging out current user, if present");
             return util.logout(loggedInSubscriber);
+        } if (payload.getMutation() == ESubscriberMutation.ACCEPT_TERMS_OF_SERVICE) {
+            ArfnaLogger.debug(this.getClass(), "Accepting terms of service of current user");
+            if (loggedInSubscriber.isEmpty())
+                return generateInvalidCallDueToNotLoggedInSubscriber();
+            return util.acceptTermsOfService(loggedInSubscriber.get(), version);
         }
         MutateSubscribersResponse response = new MutateSubscribersResponse();
         response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_API));
@@ -54,6 +59,12 @@ public class MutateSubscriberApiV1 implements IMutateSubscriberApi {
     private MutateSubscribersResponse generateInvalidCallDueToLoggedInSubscriber() {
         MutateSubscribersResponse response = new MutateSubscribersResponse();
         response.addValidationMessage(new ValidationMessage(EValidationMessage.SUBSCRIBER_ALREADY_LOGGED_IN));
+        return response;
+    }
+
+    private MutateSubscribersResponse generateInvalidCallDueToNotLoggedInSubscriber() {
+        MutateSubscribersResponse response = new MutateSubscribersResponse();
+        response.addValidationMessage(new ValidationMessage(EValidationMessage.SUBSCRIBER_NOT_LOGGED_IN));
         return response;
     }
 
