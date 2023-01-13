@@ -34,6 +34,10 @@ public class Subscriber implements Serializable {
     @Expose
     private String role = "none";
 
+    @Column(name="accepted_tos")
+    @Expose
+    private Boolean acceptedTermsOfService;
+
     @OneToMany(mappedBy="author", fetch= FetchType.EAGER)
     @Expose
     private List<Post> posts;
@@ -84,6 +88,15 @@ public class Subscriber implements Serializable {
         return this;
     }
 
+    public Boolean getAcceptedTermsOfService() {
+        return this.acceptedTermsOfService;
+    }
+
+    public Subscriber setAcceptedTermsOfService(boolean acceptedTermsOfService) {
+        this.acceptedTermsOfService = acceptedTermsOfService;
+        return this;
+    }
+
     public List<Post> getPosts() {
         if (posts == null)
             return new ArrayList<>();
@@ -113,5 +126,8 @@ public class Subscriber implements Serializable {
             other.setPassword(this.getPassword());
         if (this.getRole() != null && !this.getRole().equals("none") && !this.getRole().equals(other.getRole()))
             other.setRole(this.getRole());
+        if (this.getAcceptedTermsOfService() != null && !this.getAcceptedTermsOfService().equals(other.getAcceptedTermsOfService())) {
+            other.setAcceptedTermsOfService(this.getAcceptedTermsOfService());
+        }
     }
 }
