@@ -89,7 +89,8 @@ public class Servlet extends HttpServlet {
                 "http://arfna.org",
                 "https://www.arfna.org",
                 "http://www.arfna.org",
-                "http://webdev.arfna.org"
+                "http://webdev.arfna.org",
+                "http://webservertestloadbalancer-1421403146.us-west-2.elb.amazonaws.com"
         );
         String headerValue = "";
         for (String allowed : allowlist) {
