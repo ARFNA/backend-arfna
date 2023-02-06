@@ -21,4 +21,8 @@ public class ImageIdResponse extends MethodResponse implements Serializable {
         this.thumbnail = thumbnail;
         return this;
     }
+    
+    public String getImageId() {
+        return this.imageId;
+    }
 }
