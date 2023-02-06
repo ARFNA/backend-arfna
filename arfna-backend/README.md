@@ -185,6 +185,17 @@ This API has utilities for getting blog posts that do not require a cookie.
 }
 ```
 
+**Getting single published post**
+```json
+{
+	"version": "V1",
+	"requestType": "GET_PUBLISHED_POST_FROM_ID",
+	"post": {
+		"id": 6
+	}
+}
+```
+
 ## Reading the subscriber cookie (`/rsubscriber`)
 This API is used to read the server side only cookie. It is helpful for when a user is logged in, to get their name, email, and role for any client side validation purposes
 
