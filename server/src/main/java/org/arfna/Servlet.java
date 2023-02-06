@@ -58,7 +58,7 @@ public class Servlet extends HttpServlet {
             response.setStatus(apiResponse.getStatus().getCode());
             response.addHeader("Access-Control-Allow-Headers", "Content-Type");
             response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-            response.addHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("Access-Control-Allow-Origin", "http://webservertestloadbalancer-1421403146.us-west-2.elb.amazonaws.com");
             response.addHeader("Access-Control-Allow-Credentials", "true");
             response.getWriter().println(GsonHelper.getGsonWithPrettyPrint().toJson(apiResponse));
         }
@@ -83,7 +83,7 @@ public class Servlet extends HttpServlet {
         resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
         resp.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
         resp.addHeader("Access-Control-Allow-Credentials", "true");
-        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Origin", "http://webservertestloadbalancer-1421403146.us-west-2.elb.amazonaws.com");
     }
 
 
