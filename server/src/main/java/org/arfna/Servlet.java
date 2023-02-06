@@ -6,11 +6,13 @@ import org.arfna.service.CacheHelper;
 import org.arfna.service.ServiceClient;
 import org.arfna.util.gson.GsonHelper;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -60,6 +62,28 @@ public class Servlet extends HttpServlet {
             response.getWriter().println(GsonHelper.getGsonWithPrettyPrint().toJson(apiResponse));
         }
     }
+
+    protected void doOptions(HttpServletRequest req, HttpServletResponse resp) {
+        StringBuilder allow = new StringBuilder();
+        allow.append("GET");
+        if (allow.length() > 0) {
+            allow.append(", ");
+        }
+        allow.append("POST");
+        if (allow.length() > 0) {
+            allow.append(", ");
+        }
+        allow.append("TRACE");
+        if (allow.length() > 0) {
+            allow.append(", ");
+        }
+        allow.append("OPTIONS");
+        resp.setHeader("Allow", allow.toString());
+        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
+        resp.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        resp.addHeader("Access-Control-Allow-Origin", "*");
+    }
+
 
     public String[] generateEndpoint(String uri) {
         uri = uri.replace(ENDPOINT, "");
