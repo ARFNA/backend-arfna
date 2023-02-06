@@ -7,9 +7,11 @@ import org.hibernate.Session;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseUtil {
@@ -146,6 +148,34 @@ public class DatabaseUtil {
         return new ArrayList<>();
     }
 
+    /**
+     * This is a unique logic method.
+     * It will only get posts that are passed the submitted stage so the admin can look at it.
+     * It will also only pull posts that aren't written by admin, assuming that the rest of the posts were retrieved
+     * earlier.
+     * @return List<Post> filtered appropriately as by above.
+     */
+    public List<Post> getAllPostsForAdminView(int subscriberId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Post> query = criteriaBuilder.createQuery(Post.class);
+            Root<Post> root = query.from(Post.class);
+            query.select(root)
+                    .where(Arrays.asList(
+                            criteriaBuilder.equal(root.get("isSubmitted"), true),
+                            criteriaBuilder.notEqual(root.get("author"), subscriberId)
+                    ).toArray(new Predicate[0]))
+                    .orderBy(criteriaBuilder.desc(root.get("lastUpdated")));
+            List<Post> posts = session.createQuery(query).getResultList();
+            session.getTransaction().commit();
+            return posts;
+        } catch (Exception e) {
+            ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when fetching all submitted posts for admin view", e);
+        }
+        return new ArrayList<>();
+    }
+
     public Post getPost(int postId) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             session.beginTransaction();
@@ -156,6 +186,19 @@ public class DatabaseUtil {
             ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when fetching the post " + postId, e);
         }
         return null;
+    }
+
+    public boolean deletePost(int postId) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.beginTransaction();
+            Post post = session.get(Post.class, postId);
+            session.delete(post);
+            session.getTransaction().commit();
+            return true;
+        } catch (Exception e) {
+            ArfnaLogger.exception(DatabaseUtil.class, "Exception occurred when deleting the post " + postId, e);
+            return false;
+        }
     }
 
     public Subscriber getSubscriber(int subscriberId) {

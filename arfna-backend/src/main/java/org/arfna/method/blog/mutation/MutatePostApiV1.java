@@ -22,6 +22,8 @@ public class MutatePostApiV1 implements IMutatePostApi {
             return helper.acceptPost(payload, version, subscriber);
         } if (mutation == EPostMutation.PUBLISH) {
             return helper.publishPost(payload, version, subscriber);
+        } if (mutation == EPostMutation.DELETE) {
+            return helper.deletePost(payload, version, subscriber);
         }
         MutatePostResponse response = new MutatePostResponse();
         response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_API));

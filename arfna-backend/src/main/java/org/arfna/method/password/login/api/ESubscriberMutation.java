@@ -7,6 +7,7 @@ public enum ESubscriberMutation {
     ADD_PASSWORD,
     ADD_SUBSCRIBER_WITH_PASSWORD,
     CHECK_TYPE_FROM_EMAIL,
-    LOGOUT
+    LOGOUT,
+    ACCEPT_TERMS_OF_SERVICE,
 
 }

@@ -10,6 +10,8 @@ import org.arfna.util.logger.ArfnaLogger;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MutatePostHelper {
 
@@ -22,8 +24,72 @@ public class MutatePostHelper {
             return response;
         }
         List<Post> posts = fromTableSubscriber.getPosts();
+        if (subscriber.getRole().equals("admin")) {
+            ArfnaLogger.info(this.getClass(), "Admin role! So getting all user >=submitted posts");
+            return getAllPosts(posts, version, subscriber);
+        }
         response.setAllPosts(posts);
         return response;
+    }
+
+    private MutatePostResponse getAllPosts(List<Post> posts, EVersion version, Subscriber subscriber) {
+        MutatePostResponse response = new MutatePostResponse();
+        ArfnaLogger.debug(this.getClass(), "Getting all submitted posts for all users");
+        List<Post> allSubscriberPosts = version.getDatabaseUtil().getAllPostsForAdminView(subscriber.getId());
+        posts.addAll(allSubscriberPosts);
+        response.setAllPosts(posts);
+        return response;
+    }
+
+    public MutatePostResponse deletePost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {
+        MutatePostResponse response = new MutatePostResponse();
+        Post post = payload.getPost();
+        ArfnaLogger.debug(this.getClass(), "Deleting a post for user");
+        Subscriber subInTable = version.getDatabaseUtil().getSubscriber(subscriber.getId());
+        Set<Integer> postIdsAuthored = subInTable.getPosts().stream().map(Post::getId).collect(Collectors.toSet());
+        if (subInTable.getRole().equals("admin") || postIdsAuthored.contains(post.getId())) {
+            boolean isDeleted = version.getDatabaseUtil().deletePost(post.getId());
+            if (isDeleted)
+                return response;
+            response.addValidationMessage(new ValidationMessage(EValidationMessage.POST_DELETION_FAILED));
+            return response;
+        }
+        ArfnaLogger.warn(this.getClass(), "Unable to delete post because invalid permissions");
+        response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_POST_PERMISSIONS));
+        return response;
+    }
+
+    public MutatePostResponse getAcceptedPostsForSubscriber(EVersion version, Subscriber subscriber) {
+        MutatePostResponse allPosts = getPostsForSubscriber(version, subscriber);
+        ArfnaLogger.debug(this.getClass(), "Filtering for accepted posts");
+        List<Post> filteredPosts = allPosts.getAllPosts()
+                .stream()
+                .filter(x -> x.isAccepted() && !x.isPublished())
+                .collect(Collectors.toList());
+        allPosts.setAllPosts(filteredPosts);
+        return allPosts;
+    }
+
+    public MutatePostResponse getSubmittedPostsForSubscriber(EVersion version, Subscriber subscriber) {
+        MutatePostResponse allPosts = getPostsForSubscriber(version, subscriber);
+        ArfnaLogger.debug(this.getClass(), "Filtering for submitted posts");
+        List<Post> filteredPosts = allPosts.getAllPosts()
+                .stream()
+                .filter(x -> x.isSubmitted() && !x.isAccepted() && !x.isPublished())
+                .collect(Collectors.toList());
+        allPosts.setAllPosts(filteredPosts);
+        return allPosts;
+    }
+
+    public MutatePostResponse getPublishedPostsForSubscriber(EVersion version, Subscriber subscriber) {
+        MutatePostResponse allPosts = getPostsForSubscriber(version, subscriber);
+        ArfnaLogger.debug(this.getClass(), "Filtering for published posts");
+        List<Post> filteredPosts = allPosts.getAllPosts()
+                .stream()
+                .filter(Post::isPublished)
+                .collect(Collectors.toList());
+        allPosts.setAllPosts(filteredPosts);
+        return allPosts;
     }
 
     public MutatePostResponse getExistingPost(MutatePostPayload payload, EVersion version, Subscriber subscriber) {

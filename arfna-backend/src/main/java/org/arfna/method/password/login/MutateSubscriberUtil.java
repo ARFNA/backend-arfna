@@ -46,6 +46,15 @@ public class MutateSubscriberUtil {
         return response.setSubscriber(subscriberInTable);
     }
 
+    public MutateSubscribersResponse acceptTermsOfService(Subscriber subscriber, EVersion version) {
+        MutateSubscribersResponse response = new MutateSubscribersResponse();
+        Subscriber subscriberInTable = version.getDatabaseUtil().getSubscriber(subscriber.getId());
+        subscriberInTable.setAcceptedTermsOfService(true);
+        version.getDatabaseUtil().updateSubscriber(subscriberInTable);
+        response.setSubscriber(subscriberInTable);
+        return response;
+    }
+
     public MutateSubscribersResponse login(Subscriber subscriber, EVersion version) {
         MutateSubscribersResponse response = new MutateSubscribersResponse();
         String plainTextPassword = subscriber.getPassword();
