@@ -52,13 +52,15 @@ public class Servlet extends HttpServlet {
         } else {
             ServiceClient client = new ServiceClient();
             Optional<Subscriber> subscriberCookie = getSubscriberCookie(request);
+//            request.getHeader("origin");
             ApiResponse apiResponse = client.execute(request.getInputStream(), endpoint[1], subscriberCookie);
             addCookies(apiResponse, response);
             removeCookies(apiResponse, request, response);
             response.setStatus(apiResponse.getStatus().getCode());
             response.addHeader("Access-Control-Allow-Headers", "Content-Type");
             response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-            response.addHeader("Access-Control-Allow-Origin", "*");
+            response.addHeader("Access-Control-Allow-Origin", "*arfna.org");
+            response.addHeader("Access-Control-Allow-Credentials", "true");
             response.getWriter().println(GsonHelper.getGsonWithPrettyPrint().toJson(apiResponse));
         }
     }
@@ -81,7 +83,8 @@ public class Servlet extends HttpServlet {
         resp.setHeader("Allow", allow.toString());
         resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
         resp.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        resp.addHeader("Access-Control-Allow-Origin", "*");
+        resp.addHeader("Access-Control-Allow-Credentials", "true");
+        resp.addHeader("Access-Control-Allow-Origin", "*arfna.org");
     }
 
 
