@@ -81,6 +81,7 @@ public class Servlet extends HttpServlet {
         resp.setHeader("Allow", allow.toString());
         resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
         resp.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        resp.addHeader("Access-Control-Allow-Credentials", "true");
         resp.addHeader("Access-Control-Allow-Origin", "*");
     }
 
