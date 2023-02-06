@@ -54,6 +54,9 @@ public class Servlet extends HttpServlet {
             addCookies(apiResponse, response);
             removeCookies(apiResponse, request, response);
             response.setStatus(apiResponse.getStatus().getCode());
+            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+            response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+            response.addHeader("Access-Control-Allow-Origin", "*");
             response.getWriter().println(GsonHelper.getGsonWithPrettyPrint().toJson(apiResponse));
         }
     }
