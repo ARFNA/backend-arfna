@@ -13,6 +13,9 @@ public class GetBlogApiV1 implements IGetBlogApi{
         if (request == EGetBlogRequest.GET_ALL_PUBLISHED) {
             return helper.getAllPublishedBlogs(version);
         }
+        if (request == EGetBlogRequest.GET_PUBLISHED_POST_FROM_ID) {
+            return helper.getPublishedBlogFromId(version, payload);
+        }
         GetBlogResponse response = new GetBlogResponse();
         response.addValidationMessage(new ValidationMessage(EValidationMessage.INVALID_API));
         return response;

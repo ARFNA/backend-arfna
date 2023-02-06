@@ -11,6 +11,7 @@ public class GetBlogResponse extends MethodResponse implements Serializable {
     private static final long serialVersionUID = -4309104866174156692L;
 
     @Expose private List<Post> posts;
+    @Expose private Post post;
 
     public List<Post> getPosts() {
         return posts;
@@ -21,6 +22,12 @@ public class GetBlogResponse extends MethodResponse implements Serializable {
         prepareForSerialization();
     }
 
+    public GetBlogResponse withPost(Post post) {
+        this.post = post;
+        prepareForSerialization();
+        return this;
+    }
+
     private void prepareForSerialization() {
         if (this.posts != null)
             this.posts.forEach(x -> {
@@ -29,5 +36,11 @@ public class GetBlogResponse extends MethodResponse implements Serializable {
                 x.getAuthor().setRole(null);
                 x.getAuthor().setEmailAddress(null);
             });
+        if (this.post != null) {
+            post.getAuthor().setPostsToNull();
+            post.getAuthor().setPassword(null);
+            post.getAuthor().setRole(null);
+            post.getAuthor().setEmailAddress(null);
+        }
     }
 }
