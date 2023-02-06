@@ -35,7 +35,7 @@ public class ImageIdHelper {
         // construct image file
         byte[] decoded = Base64.decodeBase64(base64Encoding);
         ImageIdResponse idResponse = this.generateImageId(payload, version, subscriber);
-        String fullPath = idResponse + payload.getThumbnail().getExtension();
+        String fullPath = idResponse.getImageId() + payload.getThumbnail().getExtension();
         File tempFile = new File(System.getProperty("user.dir") + File.separator + fullPath);
         tempFile.getParentFile().mkdirs();
         try (FileOutputStream outputStream = new FileOutputStream(tempFile)) {
