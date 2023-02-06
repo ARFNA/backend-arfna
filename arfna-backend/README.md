@@ -198,10 +198,11 @@ It will throw an unauthorized error if the cookie is not valid anymore.
 }
 ```
 
-## Working with the image storage S3 DB (`rimageid`)
+## Working with the image storage S3 DB (`mimage`)
 This API is used for interacting and reading keys from S3, as well as ensuring a user has the right permissions with a post and the ARFNA application prior to pushing files to the S3 database. It requires a user to be logged in as a writer or above in order to use.
 
 **Generating a key for image storage**
+
 It will throw an unauthorized error if the subscriber is not the author of the given post; a subscriber can override this check if the subscriber is at least of `maint` role.
 ```json
 {
@@ -210,6 +211,40 @@ It will throw an unauthorized error if the subscriber is not the author of the g
 	"post": {
 		"id": 7
 	}
+}
+```
+
+**Uploading an image for storage**
+
+It will throw an unauthorized error if the subscriber is not the author of the given post; a subscriber can override this check if the subscriber is at least of `maint` role.
+
+This also requires client side validation as that is where the file is in whole form. It will return the image path where the item is uploaded, and this will be required to be saved in the post table afterwards.
+
+I also recommend resizing or restricting the size of the image to upload.
+
+```json
+{
+    "version": "V1",
+    "requestType": "UPLOAD_IMAGE",
+    "post": {
+        "id": 38
+    },
+    "thumbnail": {
+        "extension": ".png",
+        "base64": "{string encoding!}"
+    }
+}
+```
+
+**Retrieving an item from storage**
+
+This will return a base64 string encoding which can be used to reconstruct the file on the client side.
+
+```json
+{
+    "version": "V1",
+    "requestType": "DOWNLOAD_IMAGE",
+    "s3Path": "17ab/38ab/ghOLwSgeVelza9J.png"
 }
 ```
 
