@@ -52,15 +52,11 @@ public class Servlet extends HttpServlet {
         } else {
             ServiceClient client = new ServiceClient();
             Optional<Subscriber> subscriberCookie = getSubscriberCookie(request);
-//            request.getHeader("origin");
             ApiResponse apiResponse = client.execute(request.getInputStream(), endpoint[1], subscriberCookie);
             addCookies(apiResponse, response);
             removeCookies(apiResponse, request, response);
+            addCorsHeaders(request, response);
             response.setStatus(apiResponse.getStatus().getCode());
-            response.addHeader("Access-Control-Allow-Headers", "Content-Type");
-            response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-            response.addHeader("Access-Control-Allow-Origin", "*arfna.org");
-            response.addHeader("Access-Control-Allow-Credentials", "true");
             response.getWriter().println(GsonHelper.getGsonWithPrettyPrint().toJson(apiResponse));
         }
     }
@@ -81,12 +77,32 @@ public class Servlet extends HttpServlet {
         }
         allow.append("OPTIONS");
         resp.setHeader("Allow", allow.toString());
-        resp.addHeader("Access-Control-Allow-Headers", "Content-Type");
-        resp.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-        resp.addHeader("Access-Control-Allow-Credentials", "true");
-        resp.addHeader("Access-Control-Allow-Origin", "*arfna.org");
+        addCorsHeaders(req, resp);
     }
 
+    private void addCorsHeaders(HttpServletRequest request, HttpServletResponse response) {
+        String origin = request.getHeader("origin");
+        if (origin == null)
+            return;
+        List<String> allowlist = Arrays.asList(
+                "https://arfna.org",
+                "http://arfna.org",
+                "https://www.arfna.org",
+                "http://www.arfna.org",
+                "http://webdev.arfna.org"
+        );
+        String headerValue = "";
+        for (String allowed : allowlist) {
+            if (allowed.equalsIgnoreCase(origin)) {
+                headerValue = origin;
+            }
+        }
+
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type");
+        response.addHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        response.addHeader("Access-Control-Allow-Credentials", "true");
+        response.addHeader("Access-Control-Allow-Origin", headerValue);
+    }
 
     public String[] generateEndpoint(String uri) {
         uri = uri.replace(ENDPOINT, "");
