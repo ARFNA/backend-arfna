@@ -19,6 +19,8 @@ public enum EValidationMessage {
     SUBSCRIBER_NOT_LOGGED_IN(14, "There is not a signed in subscriber to accept terms of service."),
     INVALID_POST_PERMISSIONS(15, "The user attempting to adjust the post does not have valid permissions"),
     POST_DELETION_FAILED(16, "The request to delete the post has failed."),
+    IMAGE_UPLOAD_FAILURE(17, "The image failed to upload"),
+    IMAGE_PARSE_FAILURE(18, "Unable to parse input stream content"),
     ;
 
     private int code;
