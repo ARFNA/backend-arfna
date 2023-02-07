@@ -90,6 +90,7 @@ public class Servlet extends HttpServlet {
                 "https://www.arfna.org",
                 "http://www.arfna.org",
                 "http://webdev.arfna.org",
+                "https://webdev.arfna.org",
                 "http://webservertestloadbalancer-1421403146.us-west-2.elb.amazonaws.com"
         );
         String headerValue = "";
@@ -134,6 +135,9 @@ public class Servlet extends HttpServlet {
             subscriberKeys.forEach(k -> {
                 Cookie c = generateCookie(k);
                 response.addCookie(c);
+                String cookieHeader = response.getHeader("Set-Cookie");
+                cookieHeader = cookieHeader + "; SameSite=Strict";
+                response.setHeader("Set-Cookie", cookieHeader);
             });
         }
     }
@@ -142,6 +146,7 @@ public class Servlet extends HttpServlet {
         Cookie c = new Cookie(ECookieKeys.SUBSCRIBER.getCookieName(), k);
         c.setMaxAge(4 * 60 * 60); // 4 hours in seconds
         c.setHttpOnly(true);
+        c.setSecure(true);
         return c;
     }
 
