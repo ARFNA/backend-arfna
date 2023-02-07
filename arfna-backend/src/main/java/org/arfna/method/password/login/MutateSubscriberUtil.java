@@ -52,6 +52,7 @@ public class MutateSubscriberUtil {
         subscriberInTable.setAcceptedTermsOfService(true);
         version.getDatabaseUtil().updateSubscriber(subscriberInTable);
         response.setSubscriber(subscriberInTable);
+        response.addDataToSend(subscriberInTable);
         return response;
     }
 
