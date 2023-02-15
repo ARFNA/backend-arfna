@@ -62,6 +62,10 @@ public class MutateSubscriberUtil {
         ArfnaLogger.debug(this.getClass(), "Fetching password from table");
         Subscriber subscriberInTable = version.getDatabaseUtil().getSubscriberFromEmail(subscriber.getEmailAddress());
         ArfnaLogger.debug(this.getClass(), "Validating password");
+        if (subscriberInTable == null) {
+            response.addValidationMessage(new ValidationMessage(EValidationMessage.LOGIN_INCORRECT));
+            return response;
+        }
         boolean isCorrectPassword = version.getPasswordHelper().isPasswordValid(plainTextPassword, subscriberInTable.getPassword());
         if (!isCorrectPassword) {
             response.addValidationMessage(new ValidationMessage(EValidationMessage.LOGIN_INCORRECT));
