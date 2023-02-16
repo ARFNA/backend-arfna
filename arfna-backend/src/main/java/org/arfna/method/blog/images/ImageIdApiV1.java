@@ -4,7 +4,10 @@ import org.arfna.api.version.EVersion;
 import org.arfna.database.entity.Subscriber;
 import org.arfna.method.common.EValidationMessage;
 import org.arfna.method.common.ValidationMessage;
+import org.arfna.method.password.middleware.ESubscriberRole;
 import org.arfna.util.logger.ArfnaLogger;
+
+import java.util.Optional;
 
 public class ImageIdApiV1 implements IImageIdApi {
 

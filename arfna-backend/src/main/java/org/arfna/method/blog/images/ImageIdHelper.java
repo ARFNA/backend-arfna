@@ -83,13 +83,15 @@ public class ImageIdHelper {
     }
 
     private boolean validateSubscriberAuthoredPost(Post p, EVersion version, Subscriber s) {
+        if (s == null)
+            return false;
         ArfnaLogger.debug(this.getClass(), "Getting post from database");
         Post postFromDatabase = version.getDatabaseUtil().getPost(p.getId());
         return postFromDatabase.getAuthor().getId() == s.getId();
     }
 
     private boolean validateSubscriberHasFullEdit(Subscriber s, EVersion version) {
-        return version.getMiddlewareHelper().isSubscriberAuthorized(Optional.of(s), ESubscriberRole.MAINT_ROLE);
+        return version.getMiddlewareHelper().isSubscriberAuthorized(Optional.ofNullable(s), ESubscriberRole.MAINT_ROLE);
     }
 
     String generateId(Object ... ids) {
