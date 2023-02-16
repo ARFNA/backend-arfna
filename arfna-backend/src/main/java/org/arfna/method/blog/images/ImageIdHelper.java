@@ -75,23 +75,23 @@ public class ImageIdHelper {
         }
     }
 
-    boolean checkIfValidWritePermission(ImageIdPayload payload, EVersion version, Subscriber subscriber) {
+    boolean checkIfValidWritePermission(ImageIdPayload payload, EVersion version, Optional<Subscriber> subscriber) {
         boolean subscriberAuthored = validateSubscriberAuthoredPost(payload.getPost(), version, subscriber);
         if (subscriberAuthored)
             return true;
         return validateSubscriberHasFullEdit(subscriber, version);
     }
 
-    private boolean validateSubscriberAuthoredPost(Post p, EVersion version, Subscriber s) {
-        if (s == null)
+    private boolean validateSubscriberAuthoredPost(Post p, EVersion version, Optional<Subscriber> s) {
+        if (s.isEmpty())
             return false;
         ArfnaLogger.debug(this.getClass(), "Getting post from database");
         Post postFromDatabase = version.getDatabaseUtil().getPost(p.getId());
-        return postFromDatabase.getAuthor().getId() == s.getId();
+        return postFromDatabase.getAuthor().getId() == s.get().getId();
     }
 
-    private boolean validateSubscriberHasFullEdit(Subscriber s, EVersion version) {
-        return version.getMiddlewareHelper().isSubscriberAuthorized(Optional.ofNullable(s), ESubscriberRole.MAINT_ROLE);
+    private boolean validateSubscriberHasFullEdit(Optional<Subscriber> s, EVersion version) {
+        return version.getMiddlewareHelper().isSubscriberAuthorized(s, ESubscriberRole.MAINT_ROLE);
     }
 
     String generateId(Object ... ids) {

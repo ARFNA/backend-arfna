@@ -13,7 +13,7 @@ public class ImageIdUtility {
 
     public ImageIdResponse getResponse(String inputPayload, EVersion version, Optional<Subscriber> subscriber) {
         ImageIdPayload payload = GsonHelper.getGson().fromJson(inputPayload, ImageIdPayload.class);
-        return version.getImageIdApi().getResponse(payload, version, subscriber.get());
+        return version.getImageIdApi().getResponse(payload, version, subscriber);
     }
 
 }
