@@ -86,6 +86,7 @@ public class Servlet extends HttpServlet {
             return;
         List<String> allowlist = Arrays.asList(
                 "https://arfna.org",
+                "https://cfdev.arfna.org",
                 "http://arfna.org",
                 "https://www.arfna.org",
                 "http://www.arfna.org",
